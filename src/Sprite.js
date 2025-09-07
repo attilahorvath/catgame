@@ -13,7 +13,7 @@ export default class {
   }
 
   attributes() {
-    return [this.x, this.y, this.size, this.type, this.r, this.g, this.b, this.a, this.angle];
+    return [this.x, this.y, this.size, this.type, this.r, this.g, this.b, this.hidden ? 0 : this.a, this.angle];
   }
 
   setBaseColor(color) {

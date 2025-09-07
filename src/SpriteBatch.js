@@ -58,7 +58,6 @@ export default class {
 
       this.#game.renderer.updateBuffer(this.#instanceBuffer, new Float32Array(
         this.sprites
-            .filter(sprite => sprite.enabled && !sprite.hidden)
             .map(sprite => sprite.attributes())
             .flat()
       ), true);

@@ -134,7 +134,7 @@ export default class {
       cell.activate(false);
 
       if (cell.mines === 0) {
-        // cell.hidden = true;
+        cell.hidden = true;
 
         this.#open(x, y - 1);
         this.#open(x, y + 1);
