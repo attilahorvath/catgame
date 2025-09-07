@@ -28,7 +28,8 @@ export default class {
 
     this.#setMode('dig');
 
-    this.#game.text.write('MEOWSWEEPER', 50, 50, 32, 'inactive');
+    this.#game.text.write('MEOWSWEEPER', 50, 50, 32, 'inactive', ['sine']);
+    this.#game.text.write('SCRATCH MY BACK BUT\nONLY WHERE I LIKE IT', 50, 525, 32, 'active', ['typing']);
   }
 
   update() {
@@ -121,6 +122,7 @@ export default class {
   }
 
   #open(x, y) {
+    navigator.vibrate(200);
     const cell = this.#grid.cellAt(x, y);
 
     if (cell?.flagged) {

@@ -10,8 +10,8 @@ export default class extends SpriteBatch {
     this.#segments = [];
   }
 
-  write(text, x, y, size, color = 'active') {
-    const segment = new TextSegment(text, x, y, size, color);
+  write(text, x, y, size, color = 'active', animations, delay) {
+    const segment = new TextSegment(text, x, y, size, color, animations, delay);
 
     let currX = x;
     let currY = y;
@@ -33,7 +33,10 @@ export default class extends SpriteBatch {
       }
 
       if (type != null) {
-        segment.sprites.push(this.addSprite(currX, currY, size, type, color));
+        const sprite = this.addSprite(currX, currY, size, type, color);
+        sprite.baseX = currX;
+        sprite.baseY = currY;
+        segment.sprites.push(sprite);
       }
 
       currX += size;
@@ -56,7 +59,7 @@ export default class extends SpriteBatch {
     this.changed();
   }
 
-  update() {
+  update(timestamp) {
     for (const segment of this.#segments.filter(segment => !segment.enabled)) {
       for (const sprite of segment.sprites) {
         sprite.enabled = false;
@@ -64,6 +67,12 @@ export default class extends SpriteBatch {
     }
 
     this.#segments = this.#segments.filter(segment => segment.enabled);
+
+    for (const segment of this.#segments) {
+      if (segment.update(timestamp)) {
+        this.changed();
+      }
+    }
 
     super.update();
   }

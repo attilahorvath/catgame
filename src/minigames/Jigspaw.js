@@ -30,7 +30,7 @@ export default class {
       this.#swap(cellA, cellB);
     }
 
-    this.#game.text.changed();
+    this.#game.text.write('JIGSPAW', 50, 50, 32, 'inactive', ['sine']);
   }
 
   update() {

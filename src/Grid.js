@@ -10,8 +10,8 @@ export default class extends SpriteBatch {
   #active;
   #pressed;
 
-  constructor(game, x, y, width, height, cellSize, spacingX, spacingY, onrelease, color = 'primary') {
-    super(game, 'textures/cells.png', CELL_SIZE, true);
+  constructor(game, x, y, width, height, cellSize, spacingX, spacingY, onrelease, color = 'primary', type = 0) {
+    super(game, 'textures/cells.png', CELL_SIZE, false);
 
     this.#game = game;
 
@@ -27,7 +27,7 @@ export default class extends SpriteBatch {
 
     for (let gridY = 0; gridY < height; gridY++) {
       for (let gridX = 0; gridX < width; gridX++) {
-        const cell = this.addSprite(this.x + gridX * this.#fullW, this.y + gridY * this.#fullH, this.#cellSize, 0, color);
+        const cell = this.addSprite(this.x + gridX * this.#fullW, this.y + gridY * this.#fullH, this.#cellSize, type, color);
         cell.setColor(color);
         cell.gridX = gridX;
         cell.gridY = gridY;

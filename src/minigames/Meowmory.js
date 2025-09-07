@@ -34,6 +34,8 @@ export default class {
       cellA.secret = i;
       cellB.secret = i;
     }
+
+    this.#game.text.write('MEOWMORY', 50, 50, 32, 'inactive', ['sine']);
   }
 
   update() {

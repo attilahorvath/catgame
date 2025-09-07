@@ -1,10 +1,12 @@
 import Grid from '../Grid';
+import SpriteBatch from '../SpriteBatch';
 
 export default class {
   #game;
   #onwin;
   #onlose;
   #grid;
+  #spriteBatch;
   #timer;
   #over;
 
@@ -14,14 +16,20 @@ export default class {
     this.#onlose = onlose;
 
     this.#grid = new Grid(this.#game, 100, 150, 3, 3, 64, 20, 20, (cell) => this.#release(cell));
+    this.#spriteBatch = new SpriteBatch(this.#game, 'textures/sprites.png', 16, false);
+
+    this.#game.text.write('PAW PAW TOE', 50, 50, 32, 'inactive', ['sine']);
+    this.#game.text.write('BET YOU CANT BEAT ME', 50, 400, 32, 'active', ['typing']);
   }
 
   update() {
     this.#grid.update();
+    this.#spriteBatch.update();
   }
 
   draw() {
     this.#grid.draw();
+    this.#spriteBatch.draw();
   }
 
   #release(cell) {
@@ -51,7 +59,7 @@ export default class {
 
       cell.activate(false);
 
-      cell.write(this.#game.text, symbol, 16, 'highlight');
+      cell.draw(this.#spriteBatch, 32, 0, symbol === 'X' ? 'blackcat' : 'orangecat');
 
       this.#checkGrid();
     }

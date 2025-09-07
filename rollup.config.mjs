@@ -39,6 +39,6 @@ export default {
     html({
       title: 'Cat Game'
     }),
-    terser()
+    // terser()
   ]
 };

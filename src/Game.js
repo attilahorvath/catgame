@@ -21,11 +21,13 @@ export default class {
     this.#spriteBatch = new SpriteBatch(this, 'textures/sprites.png', 16);
     this.#cursor = this.#spriteBatch.addSprite(0, 0, 26, 0, 'blackcat');
 
-    this.#state = new Select(this);
+    // this.#state = new Select(this);
+    this.#state = new Title(this);
     // this.#state = new Minigame(this, Meowsweeper);
     // this.#cursor.a = 0.5;
 
     // this.scheduleTimer(500, () => { console.log('hi'); }, true);
+    this.minigamesWon = new Set();
   }
 
   step(timestamp) {
@@ -52,7 +54,7 @@ export default class {
 
     this.#updateTimers(timestamp);
     this.#state = this.#state.update();
-    this.text.update();
+    this.text.update(timestamp);
     this.#spriteBatch.update();
   }
 

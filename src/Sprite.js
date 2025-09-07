@@ -144,6 +144,11 @@ export default class {
     this.content = text.write(content.toString(), this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, color);
   }
 
+  draw(spriteBatch, size, type, color) {
+    (this.content || {}).enabled = false;
+    this.content = spriteBatch.addSprite(this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, type, color);
+  }
+
   #fromRGB(r, g, b) {
     this.r = r / 255.0;
     this.g = g / 255.0;

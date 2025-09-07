@@ -42,13 +42,16 @@ export default class {
   #setup() {
     this.#game.text.clear();
     this.#minigame = new this.#minigameClass(this.#game, () => this.#win(), () => this.#lose());
-    
+
     this.#exitButton = this.#buttons.sprites[0];
     this.#exitButton.write(this.#game.text, 'X', 24, 'active');
   }
 
   #win() {
-    this.#game.scheduleTimer(500, () => { alert('win'); this.#exit = true; });
+    this.#game.scheduleTimer(500, () => {
+      this.#game.minigamesWon.add(this.#minigameClass);
+      this.#exit = true;
+    });
   }
 
   #lose() {
