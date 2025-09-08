@@ -13,9 +13,17 @@ export default class {
   #currentTexture;
 
   constructor() {
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+
+    this.horizontal = window.innerWidth > window.innerHeight;
+    this.width = Math.min(Math.max(window.innerWidth, this.horizontal ? MIN_WIDTH : MIN_HEIGHT), this.horizontal ? MAX_WIDTH : MAX_HEIGHT);
+    this.height = Math.min(Math.max(window.innerHeight, this.horizontal ? MIN_HEIGHT : MIN_WIDTH), this.horizontal ? MAX_HEIGHT : MAX_WIDTH);
+
     this.canvas = document.createElement('canvas');
-    this.canvas.width = CANVAS_WIDTH;
-    this.canvas.height = CANVAS_HEIGHT;
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+    this.canvas.style.display = 'block';
     this.canvas.style.cursor = 'none';
     this.canvas.style.touchAction = 'none';
 
@@ -23,7 +31,7 @@ export default class {
 
     this.#gl = this.canvas.getContext('webgl2');
 
-    this.#gl.viewport(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    this.#gl.viewport(0, 0, this.canvas.width, this.canvas.height);
     this.#gl.clearColor(0.68, 0.68, 0.94, 1.0);
 
     this.#gl.enable(this.#gl.BLEND);
@@ -35,7 +43,7 @@ export default class {
     this.#textures = new Map();
     this.#images = [];
 
-    this.#projection = Matrix3.projection(CANVAS_WIDTH, CANVAS_HEIGHT);
+    this.#projection = Matrix3.projection(this.canvas.width, this.canvas.height);
   }
 
   createShader(name, vertexShaderSource, fragmentShaderSource) {

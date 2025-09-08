@@ -15,6 +15,14 @@ export default class extends SpriteBatch {
 
     this.#game = game;
 
+    if (x === 'center') {
+      x = this.#game.renderer.width / 2 - width * (cellSize + (spacingX ?? 0) * (width - 1) / width) / 2;
+    }
+
+    if (y === 'center') {
+      y = this.#game.renderer.height / 2 - height * (cellSize + (spacingY ?? 0) * (height - 1) / height) / 2;
+    }
+
     this.x = x;
     this.y = y;
     this.width = width;
@@ -27,7 +35,7 @@ export default class extends SpriteBatch {
 
     for (let gridY = 0; gridY < height; gridY++) {
       for (let gridX = 0; gridX < width; gridX++) {
-        const cell = this.addSprite(this.x + gridX * this.#fullW, this.y + gridY * this.#fullH, this.#cellSize, type, color);
+        const cell = this.add(this.x + gridX * this.#fullW, this.y + gridY * this.#fullH, this.#cellSize, type, color);
         cell.setColor(color);
         cell.gridX = gridX;
         cell.gridY = gridY;

@@ -18,7 +18,11 @@ export default class {
     this.#width = 6;
     this.#height = 5;
 
-    this.#grid = new Grid(this.#game, 100, 100, this.#width, this.#height, 64, 16, 16, (cell) => this.#release(cell));
+    const spacing = 16;
+
+    const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width - (spacing * (this.#width - 1) / this.#width), (this.#game.renderer.height - 110) / this.#height - (spacing * (this.#height - 1) / this.#height)));
+
+    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, spacing, spacing, (cell) => this.#release(cell));
 
     const available = this.#grid.sprites.slice();
 
@@ -35,7 +39,7 @@ export default class {
       cellB.secret = i;
     }
 
-    this.#game.text.write('MEOWMORY', 50, 50, 32, 'inactive', ['sine']);
+    this.#game.text.write('MEOWMORY', 'center', 10, 48, 'inactive', ['sine']);
   }
 
   update() {

@@ -15,11 +15,11 @@ export default class {
     this.#onwin = onwin;
     this.#onlose = onlose;
 
-    this.#grid = new Grid(this.#game, 100, 150, 3, 3, 64, 20, 20, (cell) => this.#release(cell));
+    this.#grid = new Grid(this.#game, 'center', 'center', 3, 3, 96, 20, 20, (cell) => this.#release(cell));
     this.#spriteBatch = new SpriteBatch(this.#game, 'textures/sprites.png', 16, false);
 
-    this.#game.text.write('PAW PAW TOE', 50, 50, 32, 'inactive', ['sine']);
-    this.#game.text.write('BET YOU CANT BEAT ME', 50, 400, 32, 'active', ['typing']);
+    this.#game.text.write('PAW PAW TOE', 'center', 10, 48, 'inactive', ['sine']);
+    // this.#game.text.write("BET YOU CAN'T BEAT ME!!", 50, 400, 32, 'active', ['typing', 'shake']);
   }
 
   update() {
@@ -59,7 +59,7 @@ export default class {
 
       cell.activate(false);
 
-      cell.draw(this.#spriteBatch, 32, 0, symbol === 'X' ? 'blackcat' : 'orangecat');
+      cell.draw(this.#spriteBatch, 42, 0, symbol === 'X' ? 'blackcat' : 'orangecat');
 
       this.#checkGrid();
     }

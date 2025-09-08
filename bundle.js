@@ -87,9 +87,17 @@
     #currentTexture;
 
     constructor() {
+      document.body.style.margin = '0';
+      document.body.style.padding = '0';
+
+      this.horizontal = window.innerWidth > window.innerHeight;
+      this.width = Math.min(Math.max(window.innerWidth, this.horizontal ? 800 : 600), this.horizontal ? 2200 : 1000);
+      this.height = Math.min(Math.max(window.innerHeight, this.horizontal ? 600 : 800), this.horizontal ? 1000 : 2200);
+
       this.canvas = document.createElement('canvas');
-      this.canvas.width = 800;
-      this.canvas.height = 600;
+      this.canvas.width = this.width;
+      this.canvas.height = this.height;
+      this.canvas.style.display = 'block';
       this.canvas.style.cursor = 'none';
       this.canvas.style.touchAction = 'none';
 
@@ -97,7 +105,7 @@
 
       this.#gl = this.canvas.getContext('webgl2');
 
-      this.#gl.viewport(0, 0, 800, 600);
+      this.#gl.viewport(0, 0, this.canvas.width, this.canvas.height);
       this.#gl.clearColor(0.68, 0.68, 0.94, 1.0);
 
       this.#gl.enable(this.#gl.BLEND);
@@ -109,7 +117,7 @@
       this.#textures = new Map();
       this.#images = [];
 
-      this.#projection = Matrix3.projection(800, 600);
+      this.#projection = Matrix3.projection(this.canvas.width, this.canvas.height);
     }
 
     createShader(name, vertexShaderSource, fragmentShaderSource) {
@@ -256,11 +264,15 @@
       this.#newKeyReleases = {};
 
       game.renderer.canvas.addEventListener('pointermove', event => {
+        this.mouse = event.pointerType === 'mouse';
+
         this.x = event.offsetX;
         this.y = event.offsetY;
       });
 
       game.renderer.canvas.addEventListener('pointerdown', event => {
+        this.mouse = event.pointerType === 'mouse';
+
         this.x = event.offsetX;
         this.y = event.offsetY;
 
@@ -268,6 +280,8 @@
       });
 
       game.renderer.canvas.addEventListener('pointerup', event => {
+        this.mouse = event.pointerType === 'mouse';
+        
         this.x = event.offsetX;
         this.y = event.offsetY;
 
@@ -388,6 +402,21 @@
         this.g = 0.45;
         this.b = 0.08;
         break;
+      case 'whitecat':
+        this.r = 0.9;
+        this.g = 0.9;
+        this.b = 0.9;
+        break;
+      case 'tabbycat':
+        this.r = 0.64;
+        this.g = 0.56;
+        this.b = 0.38;
+        break;
+      case 'silvercat':
+        this.r = 0.68;
+        this.g = 0.68;
+        this.b = 0.68;
+        break;
 
       // TODO: Choose darker primary colors that are easily readable on the primary background
       case 'primary1':
@@ -476,7 +505,7 @@
 
     draw(spriteBatch, size, type, color) {
       (this.content || {}).enabled = false;
-      this.content = spriteBatch.addSprite(this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, type, color);
+      this.content = spriteBatch.add(this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, type, color);
     }
 
     #fromRGB(r, g, b) {
@@ -522,7 +551,7 @@
       this.changed();
     }
 
-    addSprite(x, y, size, type, color) {
+    add(x, y, size, type, color) {
       const sprite = new Sprite(x, y, size, type, color);
 
       this.sprites.push(sprite);
@@ -621,15 +650,25 @@
   }
 
   class Text extends SpriteBatch {
+    #game;
     #segments;
 
     constructor(game) {
       super(game, 'textures/font.png', 16.0);
 
+      this.#game = game;
       this.#segments = [];
     }
 
     write(text, x, y, size, color = 'active', animations, delay) {
+      if (x === 'center') {
+        x = Math.floor(this.#game.renderer.width / 2 - (Math.max(...text.split('\n').map(s => s.length)) * size) / 2);
+      }
+
+      if (y === 'center') {
+        y = Math.floor(this.#game.renderer.height / 2 - (text.split('\n').length * size) / 2);
+      }
+
       const segment = new TextSegment(text, x, y, size, color, animations, delay);
 
       let currX = x;
@@ -649,10 +688,20 @@
           type = c.charCodeAt(0) - 'A'.charCodeAt(0);
         } else if (c >= '0' && c <= '9') {
           type = 26 + c.charCodeAt(0) - '0'.charCodeAt(0);
+        } else if (c === '?') {
+          type = 36;
+        } else if (c === '!') {
+          type = 37;
+        } else if (c === ',') {
+          type = 38;
+        } else if (c === '.') {
+          type = 39;
+        } else if (c === "'") {
+          type = 40;
         }
 
         if (type != null) {
-          const sprite = this.addSprite(currX, currY, size, type, color);
+          const sprite = this.add(currX, currY, size, type, color);
           sprite.baseX = currX;
           sprite.baseY = currY;
           segment.sprites.push(sprite);
@@ -712,6 +761,14 @@
 
       this.#game = game;
 
+      if (x === 'center') {
+        x = this.#game.renderer.width / 2 - width * (cellSize + (spacingX ?? 0) * (width - 1) / width) / 2;
+      }
+
+      if (y === 'center') {
+        y = this.#game.renderer.height / 2 - height * (cellSize + (spacingY ?? 0) * (height - 1) / height) / 2;
+      }
+
       this.x = x;
       this.y = y;
       this.width = width;
@@ -724,7 +781,7 @@
 
       for (let gridY = 0; gridY < height; gridY++) {
         for (let gridX = 0; gridX < width; gridX++) {
-          const cell = this.addSprite(this.x + gridX * this.#fullW, this.y + gridY * this.#fullH, this.#cellSize, type, color);
+          const cell = this.add(this.x + gridX * this.#fullW, this.y + gridY * this.#fullH, this.#cellSize, type, color);
           cell.setColor(color);
           cell.gridX = gridX;
           cell.gridY = gridY;
@@ -835,7 +892,7 @@
       this.#game = game;
       this.#minigameClass = minigameClass;
 
-      this.#buttons = new Grid(this.#game, 750, 10, 1, 1, 32, 0, 0, (button) => this.#buttonRelease(button));
+      this.#buttons = new Grid(this.#game, this.#game.renderer.width - 74, 10, 1, 1, 64, 0, 0, (button) => this.#buttonRelease(button));
 
       this.#exitButton = this.#buttons.sprites[0];
 
@@ -866,7 +923,7 @@
       this.#minigame = new this.#minigameClass(this.#game, () => this.#win(), () => this.#lose());
 
       this.#exitButton = this.#buttons.sprites[0];
-      this.#exitButton.write(this.#game.text, 'X', 24, 'active');
+      this.#exitButton.write(this.#game.text, 'X', 32, 'active');
     }
 
     #win() {
@@ -891,6 +948,10 @@
     #game;
     #onwin;
     #onlose;
+    #width;
+    #height;
+    #mines;
+    #fontSize;
     #grid;
     #buttons;
     #digButton;
@@ -903,20 +964,30 @@
       this.#onwin = onwin;
       this.#onlose = onlose;
 
-      this.#grid = new Grid(this.#game, 100, 150, 10, 10, 32, 4, 4, (cell) => this.#release(cell));
+      this.#width = this.#game.renderer.horizontal ? 20 : 10;
+      this.#height = this.#game.renderer.horizontal ? 10 : 20;
+      this.#mines = 10;
 
-      this.#buttons = new Grid(this.#game, 10, 10, 2, 1, 32, 10, 0, (button) => this.#buttonRelease(button));
+      this.#fontSize = 26;
 
-      this.#digButton = this.#buttons.cellAt(0, 0);
+      const spacing = 4;
+
+      const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width - (spacing * (this.#width - 1) / this.#width), (this.#game.renderer.height - 110) / this.#height - (spacing * (this.#height - 1) / this.#height)));
+
+      this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, spacing, spacing, (cell) => this.#release(cell));
+
+      this.#buttons = new Grid(this.#game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonRelease(button));
+
+      this.#digButton = this.#buttons.sprites[0];
       this.#digButton.write(this.#game.text, 'O', 30, 'active');
 
-      this.#flagButton = this.#buttons.cellAt(1, 0);
+      this.#flagButton = this.#buttons.sprites[1];
       this.#flagButton.write(this.#game.text, 'X', 30, 'active');
 
       this.#setMode('dig');
 
-      this.#game.text.write('MEOWSWEEPER', 50, 50, 32, 'inactive', ['sine']);
-      this.#game.text.write('SCRATCH MY BACK BUT\nONLY WHERE I LIKE IT', 50, 525, 32, 'active', ['typing']);
+      this.#game.text.write('MEOWSWEEPER', 'center', 10, 48, 'inactive', ['sine']);
+      // this.#game.text.write('SCRATCH MY BACK, BUT\nONLY WHERE I LIKE IT!', 50, 525, 32, 'active', ['typing', 'shake']);
     }
 
     update() {
@@ -971,7 +1042,7 @@
             this.#game.text.changed();
           } else {
             cell.flagged = true;
-            cell.write(this.#game.text, 'X', 26, 'highlight');
+            cell.write(this.#game.text, 'X', this.#fontSize, 'highlight');
           }
           break;
         }
@@ -981,7 +1052,7 @@
     #start(cell) {
       const available = this.#grid.sprites.filter(availableCell => availableCell !== cell && (Math.abs(availableCell.gridX - cell.gridX) > 1 || Math.abs(availableCell.gridY - cell.gridY) > 1));
 
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < this.#mines; i++) {
         const index = Math.floor(Math.random() * available.length);
         const mineCell = available[index];
         available.splice(index, 1);
@@ -1033,10 +1104,10 @@
           if (cell.mine) {
             for (const mineCell of this.#grid.sprites.filter(cell => cell.mine)) {
               mineCell.activate(false);
-              mineCell.write(this.#game.text, 'X', 26, 'inactive10');
+              mineCell.write(this.#game.text, 'X', this.#fontSize, 'inactive10');
             }
           } else {
-            cell.write(this.#game.text, cell.mines, 26, `inactive${cell.mines}`);
+            cell.write(this.#game.text, cell.mines, this.#fontSize, `inactive${cell.mines}`);
           }
         }
       }
@@ -1080,11 +1151,11 @@
       this.#onwin = onwin;
       this.#onlose = onlose;
 
-      this.#grid = new Grid(this.#game, 100, 150, 3, 3, 64, 20, 20, (cell) => this.#release(cell));
+      this.#grid = new Grid(this.#game, 'center', 'center', 3, 3, 96, 20, 20, (cell) => this.#release(cell));
       this.#spriteBatch = new SpriteBatch(this.#game, 'textures/sprites.png', 16, false);
 
-      this.#game.text.write('PAW PAW TOE', 50, 50, 32, 'inactive', ['sine']);
-      this.#game.text.write('BET YOU CANT BEAT ME', 50, 400, 32, 'active', ['typing']);
+      this.#game.text.write('PAW PAW TOE', 'center', 10, 48, 'inactive', ['sine']);
+      // this.#game.text.write("BET YOU CAN'T BEAT ME!!", 50, 400, 32, 'active', ['typing', 'shake']);
     }
 
     update() {
@@ -1124,7 +1195,7 @@
 
         cell.activate(false);
 
-        cell.draw(this.#spriteBatch, 32, 0, symbol === 'X' ? 'blackcat' : 'orangecat');
+        cell.draw(this.#spriteBatch, 42, 0, symbol === 'X' ? 'blackcat' : 'orangecat');
 
         this.#checkGrid();
       }
@@ -1214,14 +1285,24 @@
 
       this.#grids = [];
 
+      const gridSpacing = 16;
+
+      const gridSize = Math.floor(Math.min((this.#game.renderer.width - 20) / 3 - (gridSpacing * (3 - 1) / 3), (this.#game.renderer.height - 200) / 3 - (gridSpacing * (3 - 1) / 3)));
+
+      const spacing = 5;
+
+      const cellSize = Math.floor(Math.min((gridSize - 0) / 3 - (spacing * (3 - 1) / 3), (gridSize - 0) / 3 - (spacing * (3 - 1) / 3)));
+
+      const startX = this.#game.renderer.width / 2 - 3 * (gridSize + gridSpacing * (3 - 1) / 3) / 2;
+
       for (let y = 0; y < 3; y++) {
         for (let x = 0; x < 3; x++) {
-          const grid = new Grid(this.#game, 100 + x * 100, 100 + y * 100, 3, 3, 24, 5, 5, (cell) => this.#release(cell));
+          const grid = new Grid(this.#game, startX + x * (gridSize + gridSpacing), 100 + y * (gridSize + gridSpacing), 3, 3, cellSize, spacing, spacing, (cell) => this.#release(cell));
           this.#grids.push(grid);
         }
       }
 
-      this.#buttons = new Grid(this.#game, 10, 10, 10, 1, 32, 10, 0, (button) => this.#buttonRelease(button));
+      this.#buttons = new Grid(this.#game, 'center', this.#game.renderer.height - 74, 10, 1, 64, 10, 0, (button) => this.#buttonRelease(button));
 
       for (let digit = 1; digit <= 10; digit++) {
         const button = this.#buttons.sprites[digit - 1];
@@ -1231,6 +1312,8 @@
 
       this.#setGrid();
       this.#selectDigit(1);
+
+      this.#game.text.write('SUDOCAT', 'center', 10, 48, 'inactive', ['sine']);
     }
 
     update() {
@@ -1480,7 +1563,11 @@
       this.#width = 6;
       this.#height = 5;
 
-      this.#grid = new Grid(this.#game, 100, 100, this.#width, this.#height, 64, 16, 16, (cell) => this.#release(cell));
+      const spacing = 16;
+
+      const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width - (spacing * (this.#width - 1) / this.#width), (this.#game.renderer.height - 110) / this.#height - (spacing * (this.#height - 1) / this.#height)));
+
+      this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, spacing, spacing, (cell) => this.#release(cell));
 
       const available = this.#grid.sprites.slice();
 
@@ -1497,7 +1584,7 @@
         cellB.secret = i;
       }
 
-      this.#game.text.write('MEOWMORY', 50, 50, 32, 'inactive', ['sine']);
+      this.#game.text.write('MEOWMORY', 'center', 10, 48, 'inactive', ['sine']);
     }
 
     update() {
@@ -1579,7 +1666,9 @@
       this.#width = 10;
       this.#height = 10;
 
-      this.#grid = new Grid(this.#game, 100, 100, this.#width, this.#height, 32, 0, 0, (cell) => this.#release(cell));
+      const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width, (this.#game.renderer.height - 110) / this.#height));
+
+      this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, 0, 0, (cell) => this.#release(cell));
 
       for (let i = 0; i < this.#width * this.#height; i++) {
         const cell = this.#grid.sprites[i];
@@ -1594,7 +1683,7 @@
         this.#swap(cellA, cellB);
       }
 
-      this.#game.text.write('JIGSPAW', 50, 50, 32, 'inactive', ['sine']);
+      this.#game.text.write('JIGSPAW', 'center', 10, 48, 'inactive', ['sine']);
     }
 
     update() {
@@ -1647,14 +1736,15 @@
     #game;
     #grid;
     #buttons;
+    #spriteBatch;
     #minigameState;
 
     constructor(game) {
       this.#game = game;
 
-      this.#grid = new Grid(this.#game, 50, 100, 6, 12, 64, 0, 0, null, '', 2);
+      this.#grid = new Grid(this.#game, 'center', 'center', 6, 12, 64, 0, 0, null, '', 2);
 
-      this.#buttons = new Grid(this.#game, 100, 150, 3, 4, 64, 32, 32, (button) => this.#buttonRelease(button), '', 1);
+      this.#buttons = new Grid(this.#game, 'center', 'center', 3, 4, 64, 32, 32, (button) => this.#buttonRelease(button), '', 1);
 
       this.#buttons.sprites[0].minigame = PawPawToe;
       this.#buttons.sprites[1].minigame = Meowsweeper;
@@ -1670,7 +1760,14 @@
       this.#buttons.sprites[10].activate(false);
       this.#buttons.sprites[11].activate(false);
 
-      this.#game.text.write('HELP THE OTHER CATS\nIN THE BUILDING', 10, 10, 32, 'active', ['typing', 'shake']);
+      this.#spriteBatch = new SpriteBatch(this.#game, 'textures/sprites.png', 16, false);
+      this.#spriteBatch.add(this.#buttons.sprites[0].x + 38, this.#buttons.sprites[0].y + 38, 24, 1, 'orangecat');
+      this.#spriteBatch.add(this.#buttons.sprites[1].x + 6, this.#buttons.sprites[1].y + 38, 24, 1, 'whitecat');
+      this.#spriteBatch.add(this.#buttons.sprites[2].x + 38, this.#buttons.sprites[2].y + 38, 24, 1, 'tabbycat');
+      this.#spriteBatch.add(this.#buttons.sprites[3].x + 6, this.#buttons.sprites[3].y + 38, 24, 1, 'silvercat');
+      this.#spriteBatch.add(this.#buttons.sprites[4].x + 38, this.#buttons.sprites[4].y + 38, 24, 1, 'blackcat');
+
+      this.#game.text.write('HELP THE OTHER CATS\nIN THE BUILDING!', 'center', 10, 32, 'active', ['typing', 'shake']);
 
       for (let i = 0; i < this.#buttons.sprites.length; i++) {
         const button = this.#buttons.sprites[i];
@@ -1682,6 +1779,7 @@
 
     update() {
       this.#grid.update();
+      this.#spriteBatch.update();
       if (this.#minigameState) {
         return this.#minigameState;
       } else {
@@ -1694,6 +1792,7 @@
     draw() {
       this.#grid.draw();
       this.#buttons.draw();
+      this.#spriteBatch.draw();
     }
 
     #buttonRelease(button) {
@@ -1709,7 +1808,7 @@
     constructor(game) {
       this.#game = game;
 
-      this.#game.text.write('CAT GAME', 10, 10, 52, 'blackcat', ['sine']);
+      this.#game.text.write('CAT GAME?!', 10, 10, 52, 'blackcat', ['sine']);
       // const story = this.#game.text.write('STORY MODE', 10, 100, 32, 'active', 'typing');
       // this.#game.text.write('FREE PLAY', 10, 150, 32, 'active', 'typing');
       // this.#game.text.write('CREDITS', 10, 200, 32, 'active', 'shake');
@@ -1748,14 +1847,14 @@
 
       this.text = new Text(this);
       this.#spriteBatch = new SpriteBatch(this, 'textures/sprites.png', 16);
-      this.#cursor = this.#spriteBatch.addSprite(0, 0, 26, 0, 'blackcat');
+      this.#cursor = this.#spriteBatch.add(0, 0, 26, 0, 'blackcat');
+      this.#cursor.hidden = true;
 
       // this.#state = new Select(this);
       this.#state = new Title(this);
       // this.#state = new Minigame(this, Meowsweeper);
       // this.#cursor.a = 0.5;
 
-      // this.scheduleTimer(500, () => { console.log('hi'); }, true);
       this.minigamesWon = new Set();
     }
 
@@ -1773,6 +1872,11 @@
 
     #update(timestamp) {
       this.input.update();
+
+      if (this.input.mouse && this.#cursor.hidden) {
+        this.#cursor.hidden = false;
+        this.#spriteBatch.changed();
+      }
 
       if (this.input.moved) {
         this.#cursor.x = this.input.x - 6;

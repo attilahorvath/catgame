@@ -58,6 +58,21 @@ export default class {
       this.g = 0.45;
       this.b = 0.08;
       break;
+    case 'whitecat':
+      this.r = 0.9;
+      this.g = 0.9;
+      this.b = 0.9;
+      break;
+    case 'tabbycat':
+      this.r = 0.64;
+      this.g = 0.56;
+      this.b = 0.38;
+      break;
+    case 'silvercat':
+      this.r = 0.68;
+      this.g = 0.68;
+      this.b = 0.68;
+      break;
 
     // TODO: Choose darker primary colors that are easily readable on the primary background
     case 'primary1':
@@ -146,7 +161,7 @@ export default class {
 
   draw(spriteBatch, size, type, color) {
     (this.content || {}).enabled = false;
-    this.content = spriteBatch.addSprite(this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, type, color);
+    this.content = spriteBatch.add(this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, type, color);
   }
 
   #fromRGB(r, g, b) {

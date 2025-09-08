@@ -15,7 +15,9 @@ export default class {
     this.#width = 10;
     this.#height = 10;
 
-    this.#grid = new Grid(this.#game, 100, 100, this.#width, this.#height, 32, 0, 0, (cell) => this.#release(cell));
+    const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width, (this.#game.renderer.height - 110) / this.#height));
+
+    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, 0, 0, (cell) => this.#release(cell));
 
     for (let i = 0; i < this.#width * this.#height; i++) {
       const cell = this.#grid.sprites[i];
@@ -30,7 +32,7 @@ export default class {
       this.#swap(cellA, cellB);
     }
 
-    this.#game.text.write('JIGSPAW', 50, 50, 32, 'inactive', ['sine']);
+    this.#game.text.write('JIGSPAW', 'center', 10, 48, 'inactive', ['sine']);
   }
 
   update() {

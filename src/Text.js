@@ -2,15 +2,25 @@ import SpriteBatch from './SpriteBatch';
 import TextSegment from './TextSegment';
 
 export default class extends SpriteBatch {
+  #game;
   #segments;
 
   constructor(game) {
     super(game, 'textures/font.png', LETTER_SIZE);
 
+    this.#game = game;
     this.#segments = [];
   }
 
   write(text, x, y, size, color = 'active', animations, delay) {
+    if (x === 'center') {
+      x = Math.floor(this.#game.renderer.width / 2 - (Math.max(...text.split('\n').map(s => s.length)) * size) / 2);
+    }
+
+    if (y === 'center') {
+      y = Math.floor(this.#game.renderer.height / 2 - (text.split('\n').length * size) / 2);
+    }
+
     const segment = new TextSegment(text, x, y, size, color, animations, delay);
 
     let currX = x;
@@ -30,10 +40,20 @@ export default class extends SpriteBatch {
         type = c.charCodeAt(0) - 'A'.charCodeAt(0);
       } else if (c >= '0' && c <= '9') {
         type = 26 + c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if (c === '?') {
+        type = 36;
+      } else if (c === '!') {
+        type = 37;
+      } else if (c === ',') {
+        type = 38;
+      } else if (c === '.') {
+        type = 39;
+      } else if (c === "'") {
+        type = 40;
       }
 
       if (type != null) {
-        const sprite = this.addSprite(currX, currY, size, type, color);
+        const sprite = this.add(currX, currY, size, type, color);
         sprite.baseX = currX;
         sprite.baseY = currY;
         segment.sprites.push(sprite);

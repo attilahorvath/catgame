@@ -13,14 +13,24 @@ export default class {
 
     this.#grids = [];
 
+    const gridSpacing = 16;
+
+    const gridSize = Math.floor(Math.min((this.#game.renderer.width - 20) / 3 - (gridSpacing * (3 - 1) / 3), (this.#game.renderer.height - 200) / 3 - (gridSpacing * (3 - 1) / 3)));
+
+    const spacing = 5;
+
+    const cellSize = Math.floor(Math.min((gridSize - 0) / 3 - (spacing * (3 - 1) / 3), (gridSize - 0) / 3 - (spacing * (3 - 1) / 3)));
+
+    const startX = this.#game.renderer.width / 2 - 3 * (gridSize + gridSpacing * (3 - 1) / 3) / 2;
+
     for (let y = 0; y < 3; y++) {
       for (let x = 0; x < 3; x++) {
-        const grid = new Grid(this.#game, 100 + x * 100, 100 + y * 100, 3, 3, 24, 5, 5, (cell) => this.#release(cell));
+        const grid = new Grid(this.#game, startX + x * (gridSize + gridSpacing), 100 + y * (gridSize + gridSpacing), 3, 3, cellSize, spacing, spacing, (cell) => this.#release(cell));
         this.#grids.push(grid);
       }
     }
 
-    this.#buttons = new Grid(this.#game, 10, 10, 10, 1, 32, 10, 0, (button) => this.#buttonRelease(button));
+    this.#buttons = new Grid(this.#game, 'center', this.#game.renderer.height - 74, 10, 1, 64, 10, 0, (button) => this.#buttonRelease(button));
 
     for (let digit = 1; digit <= 10; digit++) {
       const button = this.#buttons.sprites[digit - 1];
@@ -30,6 +40,8 @@ export default class {
 
     this.#setGrid();
     this.#selectDigit(1);
+
+    this.#game.text.write('SUDOCAT', 'center', 10, 48, 'inactive', ['sine']);
   }
 
   update() {

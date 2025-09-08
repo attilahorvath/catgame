@@ -18,8 +18,10 @@ export default {
       ],
       preventAssignment: true,
 
-      CANVAS_WIDTH: '800',
-      CANVAS_HEIGHT: '600',
+      MIN_WIDTH: '800',
+      MIN_HEIGHT: '600',
+      MAX_WIDTH: '2200',
+      MAX_HEIGHT: '1000',
       LETTER_SIZE: '16.0',
       CELL_SIZE: '16.0',
       BUTTON_SIZE: '16.0',

@@ -6,7 +6,7 @@ export default class {
   constructor(game) {
     this.#game = game;
 
-    this.#game.text.write('CAT GAME', 10, 10, 52, 'blackcat', ['sine']);
+    this.#game.text.write('CAT GAME?!', 10, 10, 52, 'blackcat', ['sine']);
     // const story = this.#game.text.write('STORY MODE', 10, 100, 32, 'active', 'typing');
     // this.#game.text.write('FREE PLAY', 10, 150, 32, 'active', 'typing');
     // this.#game.text.write('CREDITS', 10, 200, 32, 'active', 'shake');

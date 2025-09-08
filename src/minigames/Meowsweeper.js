@@ -4,6 +4,10 @@ export default class {
   #game;
   #onwin;
   #onlose;
+  #width;
+  #height;
+  #mines;
+  #fontSize;
   #grid;
   #buttons;
   #digButton;
@@ -16,20 +20,30 @@ export default class {
     this.#onwin = onwin;
     this.#onlose = onlose;
 
-    this.#grid = new Grid(this.#game, 100, 150, 10, 10, 32, 4, 4, (cell) => this.#release(cell));
+    this.#width = this.#game.renderer.horizontal ? 20 : 10;
+    this.#height = this.#game.renderer.horizontal ? 10 : 20;
+    this.#mines = 10;
 
-    this.#buttons = new Grid(this.#game, 10, 10, 2, 1, 32, 10, 0, (button) => this.#buttonRelease(button));
+    this.#fontSize = 26;
 
-    this.#digButton = this.#buttons.cellAt(0, 0);
+    const spacing = 4;
+
+    const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width - (spacing * (this.#width - 1) / this.#width), (this.#game.renderer.height - 110) / this.#height - (spacing * (this.#height - 1) / this.#height)));
+
+    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, spacing, spacing, (cell) => this.#release(cell));
+
+    this.#buttons = new Grid(this.#game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonRelease(button));
+
+    this.#digButton = this.#buttons.sprites[0];
     this.#digButton.write(this.#game.text, 'O', 30, 'active');
 
-    this.#flagButton = this.#buttons.cellAt(1, 0);
+    this.#flagButton = this.#buttons.sprites[1];
     this.#flagButton.write(this.#game.text, 'X', 30, 'active');
 
     this.#setMode('dig');
 
-    this.#game.text.write('MEOWSWEEPER', 50, 50, 32, 'inactive', ['sine']);
-    this.#game.text.write('SCRATCH MY BACK BUT\nONLY WHERE I LIKE IT', 50, 525, 32, 'active', ['typing']);
+    this.#game.text.write('MEOWSWEEPER', 'center', 10, 48, 'inactive', ['sine']);
+    // this.#game.text.write('SCRATCH MY BACK, BUT\nONLY WHERE I LIKE IT!', 50, 525, 32, 'active', ['typing', 'shake']);
   }
 
   update() {
@@ -84,7 +98,7 @@ export default class {
           this.#game.text.changed();
         } else {
           cell.flagged = true;
-          cell.write(this.#game.text, 'X', 26, 'highlight');
+          cell.write(this.#game.text, 'X', this.#fontSize, 'highlight');
         }
         break;
       }
@@ -94,7 +108,7 @@ export default class {
   #start(cell) {
     const available = this.#grid.sprites.filter(availableCell => availableCell !== cell && (Math.abs(availableCell.gridX - cell.gridX) > 1 || Math.abs(availableCell.gridY - cell.gridY) > 1));
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < this.#mines; i++) {
       const index = Math.floor(Math.random() * available.length);
       const mineCell = available[index];
       available.splice(index, 1);
@@ -146,10 +160,10 @@ export default class {
         if (cell.mine) {
           for (const mineCell of this.#grid.sprites.filter(cell => cell.mine)) {
             mineCell.activate(false);
-            mineCell.write(this.#game.text, 'X', 26, 'inactive10');
+            mineCell.write(this.#game.text, 'X', this.#fontSize, 'inactive10');
           }
         } else {
-          cell.write(this.#game.text, cell.mines, 26, `inactive${cell.mines}`);
+          cell.write(this.#game.text, cell.mines, this.#fontSize, `inactive${cell.mines}`);
         }
       }
     }

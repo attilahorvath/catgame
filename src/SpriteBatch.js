@@ -39,7 +39,7 @@ export default class {
     this.changed();
   }
 
-  addSprite(x, y, size, type, color) {
+  add(x, y, size, type, color) {
     const sprite = new Sprite(x, y, size, type, color);
 
     this.sprites.push(sprite);

@@ -11,11 +11,15 @@ export default class {
     this.#newKeyReleases = {};
 
     game.renderer.canvas.addEventListener('pointermove', event => {
+      this.mouse = event.pointerType === 'mouse';
+
       this.x = event.offsetX;
       this.y = event.offsetY;
     });
 
     game.renderer.canvas.addEventListener('pointerdown', event => {
+      this.mouse = event.pointerType === 'mouse';
+
       this.x = event.offsetX;
       this.y = event.offsetY;
 
@@ -23,6 +27,8 @@ export default class {
     });
 
     game.renderer.canvas.addEventListener('pointerup', event => {
+      this.mouse = event.pointerType === 'mouse';
+      
       this.x = event.offsetX;
       this.y = event.offsetY;
 

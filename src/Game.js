@@ -19,14 +19,14 @@ export default class {
 
     this.text = new Text(this);
     this.#spriteBatch = new SpriteBatch(this, 'textures/sprites.png', 16);
-    this.#cursor = this.#spriteBatch.addSprite(0, 0, 26, 0, 'blackcat');
+    this.#cursor = this.#spriteBatch.add(0, 0, 26, 0, 'blackcat');
+    this.#cursor.hidden = true;
 
     // this.#state = new Select(this);
     this.#state = new Title(this);
     // this.#state = new Minigame(this, Meowsweeper);
     // this.#cursor.a = 0.5;
 
-    // this.scheduleTimer(500, () => { console.log('hi'); }, true);
     this.minigamesWon = new Set();
   }
 
@@ -44,6 +44,11 @@ export default class {
 
   #update(timestamp) {
     this.input.update();
+
+    if (this.input.mouse && this.#cursor.hidden) {
+      this.#cursor.hidden = false;
+      this.#spriteBatch.changed();
+    }
 
     if (this.input.moved) {
       this.#cursor.x = this.input.x - 6;
