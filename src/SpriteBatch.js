@@ -40,6 +40,14 @@ export default class {
   }
 
   add(x, y, size, type, color) {
+    if (x === 'center') {
+      x = this.#game.renderer.width / 2 - size / 2;
+    }
+
+    if (y === 'center') {
+      y = this.#game.renderer.height / 2 - size / 2;
+    }
+
     const sprite = new Sprite(x, y, size, type, color);
 
     this.sprites.push(sprite);

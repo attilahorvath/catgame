@@ -17,7 +17,7 @@ export default class {
 
     const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width, (this.#game.renderer.height - 110) / this.#height));
 
-    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, 0, 0, (cell) => this.#release(cell));
+    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, 0, 0, (cell) => this.#click(cell));
 
     for (let i = 0; i < this.#width * this.#height; i++) {
       const cell = this.#grid.sprites[i];
@@ -43,7 +43,7 @@ export default class {
     this.#grid.draw();
   }
 
-  #release(cell) {
+  #click(cell) {
     if (cell) {
       if (this.#selected) {
         this.#selected.activate(true);

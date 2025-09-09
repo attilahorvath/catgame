@@ -1,5 +1,6 @@
 export default class {
   #program;
+  #viewUniformLocation;
   #projectionUniformLocation;
   #texUniformLocation;
   #imageSizeUniformLocation;
@@ -25,6 +26,7 @@ export default class {
 
     gl.linkProgram(this.#program);
 
+    this.#viewUniformLocation = gl.getUniformLocation(this.#program, 'view');
     this.#projectionUniformLocation = gl.getUniformLocation(this.#program, 'projection');
     this.#texUniformLocation = gl.getUniformLocation(this.#program, 'tex');
     this.#imageSizeUniformLocation = gl.getUniformLocation(this.#program, 'imageSize');
@@ -32,13 +34,17 @@ export default class {
     console.log(gl.getProgramInfoLog(this.#program));
   }
 
-  use(gl, projection) {
+  use(gl, view, projection) {
     gl.useProgram(this.#program);
 
-    this.setUniforms(gl, projection);
+    this.setUniforms(gl, view, projection);
   }
 
-  setUniforms(gl, projection) {
+  setUniforms(gl, view, projection) {
+    if (this.#viewUniformLocation != null) {
+      gl.uniformMatrix3fv(this.#viewUniformLocation, false, view);
+    }
+
     if (this.#projectionUniformLocation != null) {
       gl.uniformMatrix3fv(this.#projectionUniformLocation, false, projection);
     }

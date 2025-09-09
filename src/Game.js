@@ -2,18 +2,25 @@ import Renderer from './Renderer';
 import Input from './Input';
 
 import Text from './Text';
-import Title from './states/Title';
 import SpriteBatch from './SpriteBatch';
 import Select from './states/Select';
 
 export default class {
+  #started;
   #timers;
   #spriteBatch;
   #cursor;
   #state;
+  #shakeScreen;
 
   constructor() {
-    this.renderer = new Renderer();
+    this.renderer = new Renderer(() => {
+      if (!this.#started) {
+        this.#state = new Select(this);
+        this.#started = true;
+      }
+    });
+
     this.input = new Input(this);
     this.#timers = [];
 
@@ -21,11 +28,6 @@ export default class {
     this.#spriteBatch = new SpriteBatch(this, 'textures/sprites.png', 16);
     this.#cursor = this.#spriteBatch.add(0, 0, 26, 0, 'blackcat');
     this.#cursor.hidden = true;
-
-    // this.#state = new Select(this);
-    this.#state = new Title(this);
-    // this.#state = new Minigame(this, Meowsweeper);
-    // this.#cursor.a = 0.5;
 
     this.minigamesWon = new Set();
   }
@@ -42,7 +44,18 @@ export default class {
     return timer;
   }
 
+  shake(length) {
+    navigator.vibrate(length);
+    this.#shakeScreen = true;
+    this.scheduleTimer(length, () => this.#shakeScreen = false);
+  }
+
   #update(timestamp) {
+    if (this.#shakeScreen) {
+      this.renderer.view[6] = Math.random() * 5;
+      this.renderer.view[7] = Math.random() * 5;
+    }
+
     this.input.update();
 
     if (this.input.mouse && this.#cursor.hidden) {
@@ -58,7 +71,11 @@ export default class {
     }
 
     this.#updateTimers(timestamp);
-    this.#state = this.#state.update();
+
+    if (this.#state) {
+      this.#state = this.#state.update();
+    }
+
     this.text.update(timestamp);
     this.#spriteBatch.update();
   }
@@ -86,7 +103,9 @@ export default class {
   #draw() {
     this.renderer.clear();
 
-    this.#state.draw();
+    if (this.#state) {
+      this.#state.draw();
+    }
 
     this.text.draw();
 

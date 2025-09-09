@@ -13,7 +13,7 @@ export default class {
     this.#game = game;
     this.#minigameClass = minigameClass;
 
-    this.#buttons = new Grid(this.#game, this.#game.renderer.width - 74, 10, 1, 1, 64, 0, 0, (button) => this.#buttonRelease(button));
+    this.#buttons = new Grid(this.#game, this.#game.renderer.width - 74, 10, 1, 1, 64, 0, 0, (button) => this.#buttonClick(button));
 
     this.#exitButton = this.#buttons.sprites[0];
 
@@ -58,7 +58,7 @@ export default class {
     this.#game.scheduleTimer(500, () => { this.#setup(); });
   }
 
-  #buttonRelease(button) {
+  #buttonClick(button) {
     if (button === this.#exitButton) {
       this.#exit = true;
     }

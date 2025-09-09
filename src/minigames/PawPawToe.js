@@ -15,7 +15,7 @@ export default class {
     this.#onwin = onwin;
     this.#onlose = onlose;
 
-    this.#grid = new Grid(this.#game, 'center', 'center', 3, 3, 96, 20, 20, (cell) => this.#release(cell));
+    this.#grid = new Grid(this.#game, 'center', 'center', 3, 3, 96, 20, 20, (cell) => this.#click(cell));
     this.#spriteBatch = new SpriteBatch(this.#game, 'textures/sprites.png', 16, false);
 
     this.#game.text.write('PAW PAW TOE', 'center', 10, 48, 'inactive', ['sine']);
@@ -32,7 +32,7 @@ export default class {
     this.#spriteBatch.draw();
   }
 
-  #release(cell) {
+  #click(cell) {
     if (cell && !cell.symbol) {
       this.#mark(cell, 'X');
 

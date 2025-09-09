@@ -3,6 +3,7 @@ import Matrix3 from './Matrix3';
 import Shader from './Shader';
 
 export default class {
+  #onresize;
   #gl;
   #shaders;
   #textures;
@@ -12,20 +13,35 @@ export default class {
   #currentVao;
   #currentTexture;
 
-  constructor() {
+  constructor(onresize) {
+    this.#onresize = onresize;
+
     document.body.style.margin = '0';
     document.body.style.padding = '0';
 
-    this.horizontal = window.innerWidth > window.innerHeight;
-    this.width = Math.min(Math.max(window.innerWidth, this.horizontal ? MIN_WIDTH : MIN_HEIGHT), this.horizontal ? MAX_WIDTH : MAX_HEIGHT);
-    this.height = Math.min(Math.max(window.innerHeight, this.horizontal ? MIN_HEIGHT : MIN_WIDTH), this.horizontal ? MAX_HEIGHT : MAX_WIDTH);
-
     this.canvas = document.createElement('canvas');
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
     this.canvas.style.display = 'block';
+    this.canvas.style.width = '100dvw';
+    this.canvas.style.height = '100dvh';
     this.canvas.style.cursor = 'none';
     this.canvas.style.touchAction = 'none';
+
+    new ResizeObserver(() => {
+      this.width = this.canvas.clientWidth;
+      this.height = this.canvas.clientHeight;
+
+      this.canvas.width = this.width;
+      this.canvas.height = this.height;
+
+      this.horizontal = this.width > this.height;
+
+      this.#gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+      this.#projection = Matrix3.projection(this.canvas.width, this.canvas.height);
+
+      if (this.#onresize) {
+        this.#onresize();
+      }
+    }).observe(this.canvas, { box: 'content-box' });
 
     document.body.appendChild(this.canvas);
 
@@ -43,6 +59,7 @@ export default class {
     this.#textures = new Map();
     this.#images = [];
 
+    this.view = Matrix3.identity();
     this.#projection = Matrix3.projection(this.canvas.width, this.canvas.height);
   }
 
@@ -122,10 +139,10 @@ export default class {
 
   draw(shader, vao, texture, vertexCount, instanceCount) {
     if (shader !== this.#currentShader) {
-      shader.use(this.#gl, this.#projection);
+      shader.use(this.#gl, this.view, this.#projection);
       this.#currentShader = shader;
     } else {
-      this.#currentShader.setUniforms(this.#gl, this.#projection);
+      this.#currentShader.setUniforms(this.#gl, this.view, this.#projection);
     }
 
     if (vao !== this.#currentVao) {

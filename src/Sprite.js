@@ -69,9 +69,15 @@ export default class {
       this.b = 0.38;
       break;
     case 'silvercat':
-      this.r = 0.68;
-      this.g = 0.68;
-      this.b = 0.68;
+      this.r = 0.6;
+      this.g = 0.6;
+      this.b = 0.6;
+      break;
+
+    case 'black':
+      this.r = 0.0;
+      this.g = 0.0;
+      this.b = 0.0;
       break;
 
     // TODO: Choose darker primary colors that are easily readable on the primary background

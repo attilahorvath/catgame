@@ -28,7 +28,7 @@ export default class {
 
     game.renderer.canvas.addEventListener('pointerup', event => {
       this.mouse = event.pointerType === 'mouse';
-      
+
       this.x = event.offsetX;
       this.y = event.offsetY;
 
@@ -82,5 +82,9 @@ export default class {
         this.#newKeyReleases[newKeyRelease] = false;
       }
     }
+  }
+
+  click() {
+    return (this.mouse && this.release) || (!this.mouse && this.press);
   }
 }

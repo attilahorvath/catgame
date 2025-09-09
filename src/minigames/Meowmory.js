@@ -1,11 +1,12 @@
 import Grid from '../Grid';
+import SpriteBatch from '../SpriteBatch';
 
 export default class {
   #game;
   #onwin;
-  #width;
-  #height;
+  #cellSize;
   #grid;
+  #spriteBatch;
   #opened;
   #showingA;
   #showingB;
@@ -15,18 +16,20 @@ export default class {
     this.#game = game;
     this.#onwin = onwin;
 
-    this.#width = 6;
-    this.#height = 5;
+    const width = 6;
+    const height = 5;
 
     const spacing = 16;
 
-    const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width - (spacing * (this.#width - 1) / this.#width), (this.#game.renderer.height - 110) / this.#height - (spacing * (this.#height - 1) / this.#height)));
+    this.#cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / width - (spacing * (width - 1) / width), (this.#game.renderer.height - 110) / height - (spacing * (height - 1) / height)));
 
-    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, spacing, spacing, (cell) => this.#release(cell));
+    this.#grid = new Grid(this.#game, 'center', 100, width, height, this.#cellSize, spacing, spacing, (cell) => this.#click(cell));
+
+    this.#spriteBatch = new SpriteBatch(this.#game, 'textures/sprites.png', 16, true);
 
     const available = this.#grid.sprites.slice();
 
-    for (let i = 1; i <= (this.#width * this.#height) / 2; i++) {
+    for (let i = 0; i < (width * height) / 2; i++) {
       const indexA = Math.floor(Math.random() * available.length);
       const cellA = available[indexA];
       available.splice(indexA, 1);
@@ -44,20 +47,22 @@ export default class {
 
   update() {
     this.#grid.update();
+    this.#spriteBatch.update();
   }
 
   draw() {
     this.#grid.draw();
+    this.#spriteBatch.draw();
   }
 
-  #release(cell) {
+  #click(cell) {
     if (cell && !cell.open) {
       if (this.#showingA && this.#showingB) {
         this.#cancelShowing();
       }
 
       cell.open = true;
-      cell.write(this.#game.text, cell.secret, 16, 'highlight');
+      cell.draw(this.#spriteBatch, this.#cellSize * 2 / 3, cell.secret, cell.secret < 5 ? 'tabbycat' : null);
       cell.setBaseColor('active');
 
       if (this.#opened) {
@@ -100,6 +105,7 @@ export default class {
 
     this.#grid.changed();
     this.#game.text.changed();
+    this.#spriteBatch.changed();
 
     this.#showingA = null;
     this.#showingB = null;

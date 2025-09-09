@@ -1,15 +1,20 @@
 import Grid from '../Grid';
+import SpriteBatch from '../SpriteBatch';
 
 export default class {
   #game;
   #onwin;
+  #spriteBatch;
   #grids;
+  #cellSize;
   #buttons;
   #digit;
 
   constructor(game, onwin) {
     this.#game = game;
     this.#onwin = onwin;
+
+    this.#spriteBatch = new SpriteBatch(this.#game, 'textures/sprites.png', 16, true);
 
     this.#grids = [];
 
@@ -19,22 +24,22 @@ export default class {
 
     const spacing = 5;
 
-    const cellSize = Math.floor(Math.min((gridSize - 0) / 3 - (spacing * (3 - 1) / 3), (gridSize - 0) / 3 - (spacing * (3 - 1) / 3)));
+    this.#cellSize = Math.floor(Math.min((gridSize - 0) / 3 - (spacing * (3 - 1) / 3), (gridSize - 0) / 3 - (spacing * (3 - 1) / 3)));
 
     const startX = this.#game.renderer.width / 2 - 3 * (gridSize + gridSpacing * (3 - 1) / 3) / 2;
 
     for (let y = 0; y < 3; y++) {
       for (let x = 0; x < 3; x++) {
-        const grid = new Grid(this.#game, startX + x * (gridSize + gridSpacing), 100 + y * (gridSize + gridSpacing), 3, 3, cellSize, spacing, spacing, (cell) => this.#release(cell));
+        const grid = new Grid(this.#game, startX + x * (gridSize + gridSpacing), 100 + y * (gridSize + gridSpacing), 3, 3, this.#cellSize, spacing, spacing, (cell) => this.#click(cell));
         this.#grids.push(grid);
       }
     }
 
-    this.#buttons = new Grid(this.#game, 'center', this.#game.renderer.height - 74, 10, 1, 64, 10, 0, (button) => this.#buttonRelease(button));
+    this.#buttons = new Grid(this.#game, 'center', this.#game.renderer.height - 74, 10, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
     for (let digit = 1; digit <= 10; digit++) {
       const button = this.#buttons.sprites[digit - 1];
-      button.write(this.#game.text, digit <= 9 ? digit : 'X', 30, digit <= 9 ? `inactive${digit}` : 'active');
+      button.draw(this.#spriteBatch, this.#cellSize * 2 / 3, digit + 5);
       button.digit = digit <= 9 ? digit : null;
     }
 
@@ -67,6 +72,8 @@ export default class {
       this.#selectDigit(null);
     }
 
+    this.#spriteBatch.update();
+
     for (const grid of this.#grids) {
       grid.update();
     }
@@ -80,6 +87,7 @@ export default class {
     }
 
     this.#buttons.draw();
+    this.#spriteBatch.draw();
   }
 
   #gridAt(x, y) {
@@ -114,19 +122,19 @@ export default class {
           const cell = this.#cellAt(x, y);
           cell.activate(false);
           cell.digit = digit;
-          cell.write(this.#game.text, digit, 20, `inactive${digit}`);
+          cell.draw(this.#spriteBatch, this.#cellSize * 2 / 3, digit + 5);
         }
       }
     }
   }
 
-  #release(cell) {
+  #click(cell) {
     if (cell) {
       cell.digit = this.#digit;
       (cell.content || {}).enabled = false;
 
       if (this.#digit) {
-        cell.write(this.#game.text, this.#digit, 20, `inactive${this.#digit}`);
+        cell.draw(this.#spriteBatch, this.#cellSize * 2 / 3, this.#digit + 5);
       }
 
       if (this.#checkCells()) {
@@ -136,6 +144,7 @@ export default class {
       }
 
       this.#game.text.changed();
+      this.#spriteBatch.changed();
     }
   }
 
@@ -254,7 +263,7 @@ export default class {
     return valid;
   }
 
-  #buttonRelease(button) {
+  #buttonClick(button) {
     if (button) {
       this.#selectDigit(button.digit);
     }

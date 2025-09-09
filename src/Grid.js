@@ -5,12 +5,12 @@ export default class extends SpriteBatch {
   #cellSize;
   #spacingX;
   #spacingY;
-  #onrelease;
+  #onclick;
   #color;
   #active;
   #pressed;
 
-  constructor(game, x, y, width, height, cellSize, spacingX, spacingY, onrelease, color = 'primary', type = 0) {
+  constructor(game, x, y, width, height, cellSize, spacingX, spacingY, onclick, color = 'primary', type = 0) {
     super(game, 'textures/cells.png', CELL_SIZE, false);
 
     this.#game = game;
@@ -30,7 +30,7 @@ export default class extends SpriteBatch {
     this.#cellSize = cellSize;
     this.#spacingX = spacingX ?? 0;
     this.#spacingY = spacingY ?? 0;
-    this.#onrelease = onrelease;
+    this.#onclick = onclick;
     this.#color = color;
 
     for (let gridY = 0; gridY < height; gridY++) {
@@ -52,12 +52,15 @@ export default class extends SpriteBatch {
         }
 
         if (newActive !== this.#active && !this.#pressed) {
-          if (this.onactivate || this.#onrelease) {
-            if (!this.#active?.inactive) {
-              this.#active?.setColor(this.#active?.baseColor || this.#color);
+          if (this.onactivate || this.#onclick) {
+            if (this.#game.input.mouse) {
+              if (!this.#active?.inactive) {
+                this.#active?.setColor(this.#active?.baseColor || this.#color);
+              }
+
+              newActive?.setColor('highlight');
+              this.changed();
             }
-            newActive?.setColor('highlight');
-            this.changed();
           }
 
           // if (this.onactivate) {
@@ -72,7 +75,7 @@ export default class extends SpriteBatch {
       if (this.#game.input.press) {
         this.#pressed = this.#active;
 
-        if (this.onpress || this.#onrelease) {
+        if (this.onpress || this.#onclick) {
           this.#pressed?.setColor('active');
           this.changed();
         }
@@ -83,10 +86,10 @@ export default class extends SpriteBatch {
         // }
       }
 
-      if (this.#game.input.release) {
-        if (this.#onrelease) {
+      if (this.#game.input.click()) {
+        if (this.#onclick) {
           this.#pressed?.setColor(this.#pressed?.baseColor || this.#color);
-          this.#onrelease(this.#active === this.#pressed ? this.#pressed : null, this.#pressed);
+          this.#onclick(this.#active === this.#pressed ? this.#pressed : null, this.#pressed);
           this.changed();
         }
 

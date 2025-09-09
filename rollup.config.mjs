@@ -18,10 +18,6 @@ export default {
       ],
       preventAssignment: true,
 
-      MIN_WIDTH: '800',
-      MIN_HEIGHT: '600',
-      MAX_WIDTH: '2200',
-      MAX_HEIGHT: '1000',
       LETTER_SIZE: '16.0',
       CELL_SIZE: '16.0',
       BUTTON_SIZE: '16.0',
@@ -41,6 +37,6 @@ export default {
     html({
       title: 'Cat Game'
     }),
-    // terser()
+    terser()
   ]
 };

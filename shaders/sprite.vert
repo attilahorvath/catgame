@@ -1,5 +1,6 @@
 #version 300 es
 
+uniform mat3 view;
 uniform mat3 projection;
 uniform float imageSize;
 
@@ -24,5 +25,5 @@ void main() {
   texCoord = vec2(texOffset.x, 0.0) * spriteType + vertexTexCoord * texOffset;
   tint = spriteColor;
   // TODO: Calculate rotation based on spriteAngle
-  gl_Position = vec4(projection * vec3(vertexPosition * spriteSize + spritePosition, 1.0), 1.0);
+  gl_Position = vec4(projection * view * vec3(vertexPosition * spriteSize + spritePosition, 1.0), 1.0);
 }

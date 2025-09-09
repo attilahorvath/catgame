@@ -30,9 +30,9 @@ export default class {
 
     const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width - (spacing * (this.#width - 1) / this.#width), (this.#game.renderer.height - 110) / this.#height - (spacing * (this.#height - 1) / this.#height)));
 
-    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, spacing, spacing, (cell) => this.#release(cell));
+    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, spacing, spacing, (cell) => this.#click(cell));
 
-    this.#buttons = new Grid(this.#game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonRelease(button));
+    this.#buttons = new Grid(this.#game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
     this.#digButton = this.#buttons.sprites[0];
     this.#digButton.write(this.#game.text, 'O', 30, 'active');
@@ -64,7 +64,7 @@ export default class {
     this.#buttons.draw();
   }
 
-  #release(cell) {
+  #click(cell) {
     if (cell) {
       switch (this.#mode) {
       case 'dig':
@@ -136,7 +136,7 @@ export default class {
   }
 
   #open(x, y) {
-    navigator.vibrate(200);
+    this.#game.shake(200);
     const cell = this.#grid.cellAt(x, y);
 
     if (cell?.flagged) {
@@ -175,7 +175,7 @@ export default class {
     }
   }
 
-  #buttonRelease(button) {
+  #buttonClick(button) {
     if (button === this.#flagButton) {
       this.#setMode('flag');
     } else if (button === this.#digButton) {
