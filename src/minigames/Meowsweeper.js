@@ -15,12 +15,13 @@ export default class {
   #mode;
   #started;
 
+  static title = 'MEOWSWEEPER';
   static color = 'tabbycat';
   static sx = 73;
-  static type = 4;
-  static catName = 'ORANGE CAT, THE USELESS BOYFRIEND';
-  static catText = "BET YOU CAN'T BEAT ME!\nI'M THE SMARTEST ORANGE EVER!!";
-  static title = 'MEOWSWEEPER';
+  static type = 2;
+  static catName = 'QUEEN KARA';
+  static catText = "YOU, NEW CAT!!\nI NEED YOU TO SCRATCH MY BACK\nIMMEDIATELY BUT ONLY WHERE\nI LIKE IT!\n\n\nSINCE YOU'RE NEW I WILL TELL\nYOU HOW MANY DANGER ZONES\nARE AROUND WHERE YOU'RE\nSCRATCHING!";
+  static response = 'OOOH, THE QUEEN HERSELF!!\n\n\nI NEED TO MAKE A GOOD\nFIRST IMPRESSION!';
 
   constructor(game, onwin, onlose) {
     this.#game = game;

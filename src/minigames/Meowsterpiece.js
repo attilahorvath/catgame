@@ -15,12 +15,13 @@ export default class {
   #flagButton;
   #mode;
 
-  static color = 'silvercat';
+  static title = 'MEOWSTERPIECE';
+  static color = 'whitecat';
   static sx = 8;
   static type = 3;
-  static catName = 'ORANGE CAT, THE USELESS BOYFRIEND';
-  static catText = "BET YOU CAN'T BEAT ME!\nI'M THE SMARTEST ORANGE EVER!!";
-  static title = 'MEOWSTERPIECE';
+  static catName = 'CHA CHA';
+  static catText = 'TODAY I DECIDED TO BE\nAN ARTIST!!\nHELP ME WITH THIS\nPAINT BY NUMBER!\n\n\nTHE CLUES WILL TELL YOU\nHOW MANY BLOCKS SHOULD\nBE PAINTED IN EACH ROW\nAND IN EACH COLUMN!';
+  static response = 'SURE SURE, ARTIST TODAY,\nSOMETHING ELSE TOMORROW!\n\n\nTYPICAL KITTY...';
 
   constructor(game, onwin) {
     this.#game = game;

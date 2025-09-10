@@ -9,18 +9,14 @@ export default class {
   #spriteBatch;
   #timer;
   #over;
-  // #orangeCat;
-  // #orangeCatLeftPaw;
-  // #orangeCatRightPaw;
-  // #orangeName;
-  // #orangeText;
 
+  static title = 'PAW PAW TOE';
   static color = 'orangecat';
   static sx = 73;
   static type = 2;
   static catName = 'ORANGE CAT, THE USELESS BOYFRIEND';
-  static catText = "BET YOU CAN'T BEAT ME!\nI'M THE SMARTEST ORANGE EVER!!";
-  static title = 'PAW PAW TOE';
+  static catText = "BET YOU CAN'T BEAT ME\nIN PAW PAW TOE!\n\n\nI'M THE SMARTEST\nORANGE CAT EVER!!!";
+  static response = "WELL, THAT'S\nNOT SAYING MUCH...\n\n\nLET'S SEE!"
 
   constructor(game, onwin, onlose) {
     this.#game = game;
@@ -28,29 +24,10 @@ export default class {
     this.#onlose = onlose;
 
     this.#grid = new Grid(this.#game, 'center', 'center', 3, 3, 96, 20, 20, (cell) => this.#click(cell));
-    // this.#grid.disabled = true;
     this.#spriteBatch = new SpriteBatch(this.#game);
-
-    // this.#orangeCat = this.#spriteBatch.add('center', 'center', 64, 1, 'orangecat');
-    // this.#orangeCatLeftPaw = this.#spriteBatch.add(this.#orangeCat.x - 12, this.#orangeCat.y + 60, 24, 0, 'orangecat');
-    // this.#orangeCatRightPaw = this.#spriteBatch.add(this.#orangeCat.x + 46, this.#orangeCat.y + 60, 24, 0, 'orangecat');
-
-    // this.#orangeName = this.#game.text.write('ORANGE CAT, THE USELESS BOYFRIEND', 'center', 10, 24, 'orangecat', ['sine']);
-    // this.#orangeText = this.#game.text.write("BET YOU CAN'T BEAT ME!\nI'M THE SMARTEST ORANGE EVER!!", 'center', this.#orangeCat.y + 100, 32, 'orangecat', ['typing', 'shake']);
   }
 
   update() {
-    // if (this.#game.input.click()) {
-    //   this.#grid.disabled = false;
-    //   this.#orangeCat.enabled = false;
-    //   this.#orangeCatLeftPaw.enabled = false;
-    //   this.#orangeCatRightPaw.enabled = false;
-    //   this.#spriteBatch.changed();
-    //   this.#orangeText.enabled = false;
-    //   this.#orangeName.enabled = false;
-    //   this.#game.text.write('PAW PAW TOE', 'center', 10, 48, 'inactive', ['sine']);
-    // }
-
     this.#grid.update();
     this.#spriteBatch.update();
   }

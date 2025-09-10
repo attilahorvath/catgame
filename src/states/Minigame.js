@@ -15,6 +15,7 @@ export default class {
   #catText;
   #exitButton;
   #exit;
+  #catMet;
   #started;
 
   constructor(minigameClass) {
@@ -33,7 +34,7 @@ export default class {
 
     this.#spriteBatch = new SpriteBatch(game);
 
-    this.#cat = this.#spriteBatch.add('center', 'center', 64, 1, this.#minigameClass.color);
+    this.#cat = this.#spriteBatch.add('center', 100, 64, 1, this.#minigameClass.color);
     this.#leftPaw = this.#spriteBatch.add(this.#cat.x - 12, this.#cat.y + 60, 24, 0, this.#minigameClass.color);
     this.#rightPaw = this.#spriteBatch.add(this.#cat.x + 46, this.#cat.y + 60, 24, 0, this.#minigameClass.color);
 
@@ -48,14 +49,25 @@ export default class {
 
     this.#buttons.update();
 
-    if (!this.#started && this.#game.input.click()) {
+    if (!this.#catMet && this.#game.input.click()) {
+      this.#game.input.clickRead = true;
+      this.#cat.setColor('blackcat');
+      this.#leftPaw.setColor('blackcat');
+      this.#rightPaw.setColor('blackcat');
+      this.#spriteBatch.changed();
+      this.#catName.enabled = false;
+      this.#catText.enabled = false;
+      this.#catName = this.#game.text.write('VICKI', 'center', 10, 24, 'blackcat', ['sine']);
+      this.#catText = this.#game.text.write(this.#minigameClass.response, 'center', this.#cat.y + 100, 32, 'blackcat', ['typing', 'shake']);
+      this.#catMet = true;
+    } else if (!this.#started && this.#game.input.click()) {
       this.#game.input.clickRead = true;
       this.#cat.enabled = false;
       this.#leftPaw.enabled = false;
       this.#rightPaw.enabled = false;
-      this.#spriteBatch.changed();
       this.#catName.enabled = false;
       this.#catText.enabled = false;
+      this.#spriteBatch.changed();
       this.#game.text.write(this.#minigameClass.title, 'center', 10, 48, 'inactive', ['sine']);
       this.#setup();
       this.#started = true;

@@ -7,6 +7,7 @@ import Select from './states/Select';
 import Minigame from './states/Minigame';
 import Matrix3 from './Matrix3';
 import PawPawToe from './minigames/PawPawToe';
+import Meowmory from './minigames/Meowmory';
 
 export default class {
   #started;
@@ -21,20 +22,21 @@ export default class {
   constructor() {
     this.renderer = new Renderer(() => {
       if (!this.#started) {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 128; i++) {
           const type = Math.floor(Math.random() * 15);
           let color = null;
           if (type < 5) {
             color = ['blackcat', 'orangecat', 'whitecat', 'tabbycat', 'silvercat'][Math.floor(Math.random() * 5)];
           }
           const sprite = this.#backgroundBatch.add(Math.random() * this.renderer.w, Math.random() * this.renderer.h, 16 + Math.random() * 100, type, color);
+          sprite.a = 0.33;
           sprite.dx = -0.5 + Math.random();
           sprite.dy = -0.5 + Math.random();
           sprite.ds = -0.1 + Math.random() * 0.2;
         }
 
         this.#state = new Select();
-        // this.#state = new Minigame(PawPawToe);
+        // this.#state = new Minigame(Meowmory);
         this.#state.init(this);
         this.#started = true;
       }
@@ -199,9 +201,8 @@ export default class {
       this.#state.draw();
     }
 
-    this.text.draw();
-
     this.renderer.projection = Matrix3.ortho(0, this.renderer.w, this.renderer.h, 0);
+    this.text.draw();
     this.#spriteBatch.draw();
     this.renderer.projection = currProjection;
   }

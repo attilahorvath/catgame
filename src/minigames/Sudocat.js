@@ -10,12 +10,13 @@ export default class {
   #buttons;
   #digit;
 
+  static title = 'SUDOCAT';
   static color = 'blackcat';
   static sx = 73;
-  static type = 3;
-  static catName = 'ORANGE CAT, THE USELESS BOYFRIEND';
-  static catText = "BET YOU CAN'T BEAT ME!\nI'M THE SMARTEST ORANGE EVER!!";
-  static title = 'SUDOCAT';
+  static type = 4;
+  static catName = 'KUMBA';
+  static catText = "I NEED ALL MY TREATS AND\nTOYS NEATLY ORGANISED!!\n\n\nTHERE SHOULD BE ONLY ONE\nTYPE IN EACH ROW, EACH\nCOLUMN AND IN EACH BOX!!";
+  static response = 'KITTY MUST HAVE OCD...';
 
   constructor(game, onwin) {
     this.#game = game;

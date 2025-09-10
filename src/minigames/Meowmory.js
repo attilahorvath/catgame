@@ -11,19 +11,20 @@ export default class {
   #showingB;
   #timer;
 
-  static color = 'whitecat';
-  static sx = 8;
-  static type = 2;
-  static catName = 'ORANGE CAT, THE USELESS BOYFRIEND';
-  static catText = "BET YOU CAN'T BEAT ME!\nI'M THE SMARTEST ORANGE EVER!!";
   static title = 'MEOWMORY';
+  static color = 'silvercat';
+  static sx = 8;
+  static type = 3;
+  static catName = 'MOLLY';
+  static catText = "THEY SAY I HAVE THE\nMEMORY OF A GOLDFISH...\n\n\nCAN YOU SHOW ME HOW\nTO REMEMBER THINGS??";
+  static response = 'SOMEONE SAID FISHIE?!\n\n\nYUM!!!';
 
   constructor(game, onwin) {
     this.#game = game;
     this.#onwin = onwin;
 
-    const w = 6;
-    const h = 5;
+    const w = this.#game.renderer.horizontal ? 6 : 5;
+    const h = this.#game.renderer.horizontal ? 5 : 6;
 
     const spacing = 16;
 
@@ -47,8 +48,6 @@ export default class {
       cellA.secret = i;
       cellB.secret = i;
     }
-
-    game.text.write('MEOWMORY', 'center', 10, 48, 'inactive', ['sine']);
   }
 
   update() {
