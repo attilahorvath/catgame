@@ -3,8 +3,6 @@ import Grid from '../Grid';
 export default class {
   #game;
   #onwin;
-  #width;
-  #height;
   #grid;
   #selected;
 
@@ -12,20 +10,20 @@ export default class {
     this.#game = game;
     this.#onwin = onwin;
 
-    this.#width = 10;
-    this.#height = 10;
+    const w = 10;
+    const h = 10;
 
-    const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width, (this.#game.renderer.height - 110) / this.#height));
+    const s = Math.floor(Math.min((this.#game.renderer.w - 20) / w, (this.#game.renderer.h - 110) / h));
 
-    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, 0, 0, (cell) => this.#click(cell));
+    this.#grid = new Grid(this.#game, 'center', 100, w, h, s, 0, 0, (cell) => this.#click(cell));
 
-    for (let i = 0; i < this.#width * this.#height; i++) {
+    for (let i = 0; i < w * h; i++) {
       const cell = this.#grid.sprites[i];
       cell.index = i;
       cell.write(this.#game.text, i, 12, 'highlight');
     }
 
-    for (let i = 0; i < (this.#width * this.#height) / 2; i++) {
+    for (let i = 0; i < (w * h) / 2; i++) {
       const cellA = this.#grid.sprites[Math.floor(Math.random() * this.#grid.sprites.length)];
       const cellB = this.#grid.sprites[Math.floor(Math.random() * this.#grid.sprites.length)];
 
@@ -44,16 +42,14 @@ export default class {
   }
 
   #click(cell) {
-    if (cell) {
-      if (this.#selected) {
-        this.#selected.activate(true);
-        this.#swap(this.#selected, cell);
-        this.#selected = null;
-        this.#checkGrid();
-      } else {
-        cell.activate(false);
-        this.#selected = cell;
-      }
+    if (this.#selected) {
+      this.#selected.activate(true);
+      this.#swap(this.#selected, cell);
+      this.#selected = null;
+      this.#checkGrid();
+    } else {
+      cell.activate(false);
+      this.#selected = cell;
     }
   }
 
@@ -67,7 +63,7 @@ export default class {
   }
 
   #checkGrid() {
-    for (let i = 0; i < this.#width * this.#height; i++) {
+    for (let i = 0; i < this.#grid.w * this.#grid.h; i++) {
       if (this.#grid.sprites[i].index !== i) {
         return;
       }
@@ -75,8 +71,6 @@ export default class {
 
     this.#grid.disabled = true;
 
-    if (this.#onwin) {
-      this.#onwin();
-    }
+    this.#onwin();
   }
 }

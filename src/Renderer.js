@@ -8,7 +8,7 @@ export default class {
   #shaders;
   #textures;
   #images;
-  #projection;
+  // projection;
   #currentShader;
   #currentVao;
   #currentTexture;
@@ -27,16 +27,16 @@ export default class {
     this.canvas.style.touchAction = 'none';
 
     new ResizeObserver(() => {
-      this.width = this.canvas.clientWidth;
-      this.height = this.canvas.clientHeight;
+      this.w = this.canvas.clientWidth;
+      this.h = this.canvas.clientHeight;
 
-      this.canvas.width = this.width;
-      this.canvas.height = this.height;
+      this.canvas.width = this.w;
+      this.canvas.height = this.h;
 
-      this.horizontal = this.width > this.height;
+      this.horizontal = this.w > this.h;
 
-      this.#gl.viewport(0, 0, this.canvas.width, this.canvas.height);
-      this.#projection = Matrix3.projection(this.canvas.width, this.canvas.height);
+      this.#gl.viewport(0, 0, this.w, this.h);
+      this.projection = Matrix3.ortho(0, this.w, this.h, 0);
 
       if (this.#onresize) {
         this.#onresize();
@@ -50,8 +50,10 @@ export default class {
     this.#gl.viewport(0, 0, this.canvas.width, this.canvas.height);
     this.#gl.clearColor(0.68, 0.68, 0.94, 1.0);
 
+    this.#gl.pixelStorei(this.#gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+
     this.#gl.enable(this.#gl.BLEND);
-    this.#gl.blendFunc(this.#gl.SRC_ALPHA, this.#gl.ONE_MINUS_SRC_ALPHA);
+    this.#gl.blendFunc(this.#gl.ONE, this.#gl.ONE_MINUS_SRC_ALPHA);
 
     this.quadBuffer = this.#createQuadBuffer();
 
@@ -60,7 +62,7 @@ export default class {
     this.#images = [];
 
     this.view = Matrix3.identity();
-    this.#projection = Matrix3.projection(this.canvas.width, this.canvas.height);
+    this.projection = Matrix3.ortho(0, 0, this.canvas.width, this.canvas.height);
   }
 
   createShader(name, vertexShaderSource, fragmentShaderSource) {
@@ -112,7 +114,7 @@ export default class {
   }
 
   loadTexture(path, smooth) {
-    const cachedTexture = this.#textures.get(path);
+    const cachedTexture = this.#textures.get(`${path}_${smooth}`);
 
     if (cachedTexture) {
       return cachedTexture;
@@ -127,22 +129,22 @@ export default class {
     image.src = path;
     image.onload = () => this.#prepareTexture(texture, imageIndex, smooth);
 
-    this.#textures.set(path, texture);
+    this.#textures.set(`${path}_${smooth}`, texture);
     this.#images[imageIndex] = image;
 
     return texture;
   }
 
   clear() {
-    this.#gl.clear(this.#gl.COLOR_BUFFER_BIT | this.#gl.DEPTH_BUFFER_BIT);
+    this.#gl.clear(this.#gl.COLOR_BUFFER_BIT);
   }
 
   draw(shader, vao, texture, vertexCount, instanceCount) {
     if (shader !== this.#currentShader) {
-      shader.use(this.#gl, this.view, this.#projection);
+      shader.use(this.#gl, this.view, this.projection);
       this.#currentShader = shader;
     } else {
-      this.#currentShader.setUniforms(this.#gl, this.view, this.#projection);
+      this.#currentShader.setUniforms(this.#gl, this.view, this.projection);
     }
 
     if (vao !== this.#currentVao) {
@@ -178,8 +180,6 @@ export default class {
   #prepareTexture(texture, imageIndex, smooth) {
     this.#gl.activeTexture(this.#gl.TEXTURE0);
     this.#gl.bindTexture(this.#gl.TEXTURE_2D, texture);
-
-    this.#gl.pixelStorei(this.#gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 
     if (imageIndex != null) {
       this.#gl.texImage2D(this.#gl.TEXTURE_2D, 0, this.#gl.RGBA, this.#gl.RGBA, this.#gl.UNSIGNED_BYTE, this.#images[imageIndex]);

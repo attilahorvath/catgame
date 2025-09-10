@@ -82,9 +82,11 @@ export default class {
         this.#newKeyReleases[newKeyRelease] = false;
       }
     }
+
+    this.clickRead = false;
   }
 
   click() {
-    return (this.mouse && this.release) || (!this.mouse && this.press);
+    return !this.clickRead && ((this.mouse && this.release) || (!this.mouse && this.press));
   }
 }

@@ -54,7 +54,7 @@ export default class {
     }
 
     if (this.#imageSizeUniformLocation != null) {
-      gl.uniform1f(this.#imageSizeUniformLocation, this.imageSize);
+      gl.uniform1f(this.#imageSizeUniformLocation, IMAGE_SIZE);
     }
   }
 

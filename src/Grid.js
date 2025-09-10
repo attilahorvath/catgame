@@ -2,7 +2,6 @@ import SpriteBatch from './SpriteBatch';
 
 export default class extends SpriteBatch {
   #game;
-  #cellSize;
   #spacingX;
   #spacingY;
   #onclick;
@@ -10,32 +9,32 @@ export default class extends SpriteBatch {
   #active;
   #pressed;
 
-  constructor(game, x, y, width, height, cellSize, spacingX, spacingY, onclick, color = 'primary', type = 0) {
-    super(game, 'textures/cells.png', CELL_SIZE, false);
+  constructor(game, x, y, w, h, s, spacingX, spacingY, onclick, color = 'primary', type = 0) {
+    super(game, false, 'textures/cells.png');
 
     this.#game = game;
 
     if (x === 'center') {
-      x = this.#game.renderer.width / 2 - width * (cellSize + (spacingX ?? 0) * (width - 1) / width) / 2;
+      x = this.#game.renderer.w / 2 - w * (s + (spacingX ?? 0) * (w - 1) / w) / 2;
     }
 
     if (y === 'center') {
-      y = this.#game.renderer.height / 2 - height * (cellSize + (spacingY ?? 0) * (height - 1) / height) / 2;
+      y = this.#game.renderer.h / 2 - h * (s + (spacingY ?? 0) * (h - 1) / h) / 2;
     }
 
     this.x = x;
     this.y = y;
-    this.width = width;
-    this.height = height
-    this.#cellSize = cellSize;
+    this.w = w;
+    this.h = h
+    this.s = s;
     this.#spacingX = spacingX ?? 0;
     this.#spacingY = spacingY ?? 0;
     this.#onclick = onclick;
     this.#color = color;
 
-    for (let gridY = 0; gridY < height; gridY++) {
-      for (let gridX = 0; gridX < width; gridX++) {
-        const cell = this.add(this.x + gridX * this.#fullW, this.y + gridY * this.#fullH, this.#cellSize, type, color);
+    for (let gridY = 0; gridY < h; gridY++) {
+      for (let gridX = 0; gridX < w; gridX++) {
+        const cell = this.add(this.x + gridX * this.#fullW, this.y + gridY * this.#fullH, s, type, color);
         cell.setColor(color);
         cell.gridX = gridX;
         cell.gridY = gridY;
@@ -76,8 +75,10 @@ export default class extends SpriteBatch {
         this.#pressed = this.#active;
 
         if (this.onpress || this.#onclick) {
-          this.#pressed?.setColor('active');
-          this.changed();
+          if (this.#game.input.mouse) {
+            this.#pressed?.setColor('active');
+            this.changed();
+          }
         }
 
         // if (this.onpress) {
@@ -89,7 +90,10 @@ export default class extends SpriteBatch {
       if (this.#game.input.click()) {
         if (this.#onclick) {
           this.#pressed?.setColor(this.#pressed?.baseColor || this.#color);
-          this.#onclick(this.#active === this.#pressed ? this.#pressed : null, this.#pressed);
+          if (this.#active && this.#active === this.#pressed) {
+            this.#game.input.clickRead = true;
+            this.#onclick(this.#pressed);
+          }
           this.changed();
         }
 
@@ -101,8 +105,8 @@ export default class extends SpriteBatch {
   }
 
   cellAt(x, y) {
-    if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
-      return this.sprites[this.width * y + x];
+    if (x >= 0 && x < this.w && y >= 0 && y < this.h) {
+      return this.sprites[this.w * y + x];
     }
   }
 
@@ -121,18 +125,18 @@ export default class extends SpriteBatch {
     const indexY = Math.trunc(relY / this.#fullH);
 
     if (relX >= 0 && relY >= 0 &&
-        relX - indexX * this.#fullW < this.#cellSize &&
-        relY - indexY * this.#fullH < this.#cellSize &&
-        indexX >= 0 && indexX < this.width && indexY >= 0 && indexY < this.height) {
+        relX - indexX * this.#fullW < this.s &&
+        relY - indexY * this.#fullH < this.s &&
+        indexX >= 0 && indexX < this.w && indexY >= 0 && indexY < this.h) {
       return [indexX, indexY];
     }
   }
 
   get #fullW() {
-    return this.#cellSize + this.#spacingX;
+    return this.s + this.#spacingX;
   }
 
   get #fullH() {
-    return this.#cellSize + this.#spacingY;
+    return this.s + this.#spacingY;
   }
 }

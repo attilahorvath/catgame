@@ -5,16 +5,14 @@ import Sprite from './Sprite';
 
 export default class {
   #game;
-  #imageSize;
   #shader;
   #vao;
   #instanceBuffer;
   #texture;
   #spritesChanged;
 
-  constructor(game, texturePath, imageSize, smooth) {
+  constructor(game, smooth = false, texturePath = 'textures/sprites.png') {
     this.#game = game;
-    this.#imageSize = imageSize;
 
     this.#shader = this.#game.renderer.createShader('sprite', vertexShaderSource, fragmentShaderSource);
 
@@ -41,11 +39,11 @@ export default class {
 
   add(x, y, size, type, color) {
     if (x === 'center') {
-      x = this.#game.renderer.width / 2 - size / 2;
+      x = this.#game.renderer.w / 2 - size / 2;
     }
 
     if (y === 'center') {
-      y = this.#game.renderer.height / 2 - size / 2;
+      y = this.#game.renderer.h / 2 - size / 2;
     }
 
     const sprite = new Sprite(x, y, size, type, color);
@@ -75,7 +73,6 @@ export default class {
   }
 
   draw() {
-    this.#shader.imageSize = this.#imageSize;
     this.#game.renderer.draw(this.#shader, this.#vao, this.#texture, 6, this.sprites.length);
   }
 }

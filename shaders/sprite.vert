@@ -24,6 +24,7 @@ void main() {
 
   texCoord = vec2(texOffset.x, 0.0) * spriteType + vertexTexCoord * texOffset;
   tint = spriteColor;
+  tint.rgb *= tint.a;
   // TODO: Calculate rotation based on spriteAngle
   gl_Position = vec4(projection * view * vec3(vertexPosition * spriteSize + spritePosition, 1.0), 1.0);
 }

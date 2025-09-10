@@ -4,7 +4,6 @@ import SpriteBatch from '../SpriteBatch';
 export default class {
   #game;
   #onwin;
-  #cellSize;
   #grid;
   #spriteBatch;
   #opened;
@@ -12,24 +11,31 @@ export default class {
   #showingB;
   #timer;
 
+  static color = 'whitecat';
+  static sx = 8;
+  static type = 2;
+  static catName = 'ORANGE CAT, THE USELESS BOYFRIEND';
+  static catText = "BET YOU CAN'T BEAT ME!\nI'M THE SMARTEST ORANGE EVER!!";
+  static title = 'MEOWMORY';
+
   constructor(game, onwin) {
     this.#game = game;
     this.#onwin = onwin;
 
-    const width = 6;
-    const height = 5;
+    const w = 6;
+    const h = 5;
 
     const spacing = 16;
 
-    this.#cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / width - (spacing * (width - 1) / width), (this.#game.renderer.height - 110) / height - (spacing * (height - 1) / height)));
+    const s = Math.floor(Math.min((game.renderer.w - 20) / w - (spacing * (w - 1) / w), (game.renderer.h - 110) / h - (spacing * (h - 1) / h)));
 
-    this.#grid = new Grid(this.#game, 'center', 100, width, height, this.#cellSize, spacing, spacing, (cell) => this.#click(cell));
+    this.#grid = new Grid(game, 'center', 100, w, h, s, spacing, spacing, (cell) => this.#click(cell));
 
-    this.#spriteBatch = new SpriteBatch(this.#game, 'textures/sprites.png', 16, true);
+    this.#spriteBatch = new SpriteBatch(game, true);
 
     const available = this.#grid.sprites.slice();
 
-    for (let i = 0; i < (width * height) / 2; i++) {
+    for (let i = 0; i < (w * h) / 2; i++) {
       const indexA = Math.floor(Math.random() * available.length);
       const cellA = available[indexA];
       available.splice(indexA, 1);
@@ -42,7 +48,7 @@ export default class {
       cellB.secret = i;
     }
 
-    this.#game.text.write('MEOWMORY', 'center', 10, 48, 'inactive', ['sine']);
+    game.text.write('MEOWMORY', 'center', 10, 48, 'inactive', ['sine']);
   }
 
   update() {
@@ -56,13 +62,13 @@ export default class {
   }
 
   #click(cell) {
-    if (cell && !cell.open) {
+    if (!cell.open) {
       if (this.#showingA && this.#showingB) {
         this.#cancelShowing();
       }
 
       cell.open = true;
-      cell.draw(this.#spriteBatch, this.#cellSize * 2 / 3, cell.secret, cell.secret < 5 ? 'tabbycat' : null);
+      cell.draw(this.#spriteBatch, this.#grid.s * 2 / 3, cell.secret, cell.secret < 5 ? 'tabbycat' : null);
       cell.setBaseColor('active');
 
       if (this.#opened) {
@@ -74,9 +80,7 @@ export default class {
           this.#opened.activate(false);
 
           if (this.#grid.sprites.every(cell => cell.found)) {
-            if (this.#onwin) {
-              this.#onwin();
-            }
+            this.#onwin();
           }
         } else {
           this.#showingA = this.#opened;

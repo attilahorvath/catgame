@@ -10,23 +10,30 @@ export default class {
   #buttons;
   #digit;
 
+  static color = 'blackcat';
+  static sx = 73;
+  static type = 3;
+  static catName = 'ORANGE CAT, THE USELESS BOYFRIEND';
+  static catText = "BET YOU CAN'T BEAT ME!\nI'M THE SMARTEST ORANGE EVER!!";
+  static title = 'SUDOCAT';
+
   constructor(game, onwin) {
     this.#game = game;
     this.#onwin = onwin;
 
-    this.#spriteBatch = new SpriteBatch(this.#game, 'textures/sprites.png', 16, true);
+    this.#spriteBatch = new SpriteBatch(this.#game, true);
 
     this.#grids = [];
 
     const gridSpacing = 16;
 
-    const gridSize = Math.floor(Math.min((this.#game.renderer.width - 20) / 3 - (gridSpacing * (3 - 1) / 3), (this.#game.renderer.height - 200) / 3 - (gridSpacing * (3 - 1) / 3)));
+    const gridSize = Math.floor(Math.min((this.#game.renderer.w - 20) / 3 - (gridSpacing * (3 - 1) / 3), (this.#game.renderer.h - 200) / 3 - (gridSpacing * (3 - 1) / 3)));
 
     const spacing = 5;
 
     this.#cellSize = Math.floor(Math.min((gridSize - 0) / 3 - (spacing * (3 - 1) / 3), (gridSize - 0) / 3 - (spacing * (3 - 1) / 3)));
 
-    const startX = this.#game.renderer.width / 2 - 3 * (gridSize + gridSpacing * (3 - 1) / 3) / 2;
+    const startX = this.#game.renderer.w / 2 - 3 * (gridSize + gridSpacing * (3 - 1) / 3) / 2;
 
     for (let y = 0; y < 3; y++) {
       for (let x = 0; x < 3; x++) {
@@ -35,11 +42,11 @@ export default class {
       }
     }
 
-    this.#buttons = new Grid(this.#game, 'center', this.#game.renderer.height - 74, 10, 1, 64, 10, 0, (button) => this.#buttonClick(button));
+    this.#buttons = new Grid(this.#game, 'center', this.#game.renderer.h - 74, 10, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
     for (let digit = 1; digit <= 10; digit++) {
       const button = this.#buttons.sprites[digit - 1];
-      button.draw(this.#spriteBatch, this.#cellSize * 2 / 3, digit + 5);
+      button.draw(this.#spriteBatch, 64 * 2 / 3, digit + 5);
       button.digit = digit <= 9 ? digit : null;
     }
 
@@ -129,23 +136,19 @@ export default class {
   }
 
   #click(cell) {
-    if (cell) {
-      cell.digit = this.#digit;
-      (cell.content || {}).enabled = false;
+    cell.digit = this.#digit;
+    (cell.content || {}).enabled = false;
 
-      if (this.#digit) {
-        cell.draw(this.#spriteBatch, this.#cellSize * 2 / 3, this.#digit + 5);
-      }
-
-      if (this.#checkCells()) {
-        if (this.#onwin) {
-          this.#onwin();
-        }
-      }
-
-      this.#game.text.changed();
-      this.#spriteBatch.changed();
+    if (this.#digit) {
+      cell.draw(this.#spriteBatch, this.#cellSize * 2 / 3, this.#digit + 5);
     }
+
+    if (this.#checkCells()) {
+      this.#onwin();
+    }
+
+    this.#game.text.changed();
+    this.#spriteBatch.changed();
   }
 
   #checkCells() {

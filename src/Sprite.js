@@ -160,9 +160,9 @@ export default class {
     this.setColor(active ? (this.baseColor || 'primary') : 'inactive');
   }
 
-  write(text, content, size, color = 'active') {
+  write(text, content, size, color = 'active', animations = null, delay = null) {
     (this.content || {}).enabled = false;
-    this.content = text.write(content.toString(), this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, color);
+    this.content = text.write(content.toString(), this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, color, animations, delay);
   }
 
   draw(spriteBatch, size, type, color) {

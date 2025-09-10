@@ -4,8 +4,8 @@ export default class {
   #game;
   #onwin;
   #onlose;
-  #width;
-  #height;
+  #w;
+  #h;
   #mines;
   #fontSize;
   #grid;
@@ -15,22 +15,29 @@ export default class {
   #mode;
   #started;
 
+  static color = 'tabbycat';
+  static sx = 73;
+  static type = 4;
+  static catName = 'ORANGE CAT, THE USELESS BOYFRIEND';
+  static catText = "BET YOU CAN'T BEAT ME!\nI'M THE SMARTEST ORANGE EVER!!";
+  static title = 'MEOWSWEEPER';
+
   constructor(game, onwin, onlose) {
     this.#game = game;
     this.#onwin = onwin;
     this.#onlose = onlose;
 
-    this.#width = this.#game.renderer.horizontal ? 20 : 10;
-    this.#height = this.#game.renderer.horizontal ? 10 : 20;
+    this.#w = this.#game.renderer.horizontal ? 20 : 10;
+    this.#h = this.#game.renderer.horizontal ? 10 : 20;
     this.#mines = 10;
 
     this.#fontSize = 26;
 
     const spacing = 4;
 
-    const cellSize = Math.floor(Math.min((this.#game.renderer.width - 20) / this.#width - (spacing * (this.#width - 1) / this.#width), (this.#game.renderer.height - 110) / this.#height - (spacing * (this.#height - 1) / this.#height)));
+    const s = Math.floor(Math.min((this.#game.renderer.w - 20) / this.#w - (spacing * (this.#w - 1) / this.#w), (this.#game.renderer.h - 110) / this.#h - (spacing * (this.#h - 1) / this.#h)));
 
-    this.#grid = new Grid(this.#game, 'center', 100, this.#width, this.#height, cellSize, spacing, spacing, (cell) => this.#click(cell));
+    this.#grid = new Grid(this.#game, 'center', 100, this.#w, this.#h, s, spacing, spacing, (cell) => this.#click(cell));
 
     this.#buttons = new Grid(this.#game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
@@ -65,43 +72,39 @@ export default class {
   }
 
   #click(cell) {
-    if (cell) {
-      switch (this.#mode) {
-      case 'dig':
-        if (!this.#started) {
-          this.#start(cell);
-        }
-
-        this.#open(cell.gridX, cell.gridY);
-
-        if (cell.mine) {
-          this.#grid.disabled = true;
-
-          this.#game.scheduleTimer(2000, () => {
-            for (const cell of this.#grid.sprites) {
-              (cell.content || {}).enabled = false;
-            }
-
-            this.#game.text.changed();
-
-            if (this.#onlose) {
-              this.#onlose();
-            }
-          });
-        }
-
-        break;
-      case 'flag':
-        if (cell.flagged) {
-          cell.flagged = false;
-          cell.content.enabled = false;
-          this.#game.text.changed();
-        } else {
-          cell.flagged = true;
-          cell.write(this.#game.text, 'X', this.#fontSize, 'highlight');
-        }
-        break;
+    switch (this.#mode) {
+    case 'dig':
+      if (!this.#started) {
+        this.#start(cell);
       }
+
+      this.#open(cell.gridX, cell.gridY);
+
+      if (cell.mine) {
+        this.#grid.disabled = true;
+
+        this.#game.scheduleTimer(2000, () => {
+          for (const cell of this.#grid.sprites) {
+            (cell.content || {}).enabled = false;
+          }
+
+          this.#game.text.changed();
+
+          this.#onlose();
+        });
+      }
+
+      break;
+    case 'flag':
+      if (cell.flagged) {
+        cell.flagged = false;
+        cell.content.enabled = false;
+        this.#game.text.changed();
+      } else {
+        cell.flagged = true;
+        cell.write(this.#game.text, 'X', this.#fontSize, 'highlight');
+      }
+      break;
     }
   }
 
@@ -116,8 +119,8 @@ export default class {
       mineCell.mine = true;
     }
 
-    for (let y = 0; y < this.#grid.height; y++) {
-      for (let x = 0; x < this.#grid.width; x++) {
+    for (let y = 0; y < this.#grid.h; y++) {
+      for (let x = 0; x < this.#grid.w; x++) {
         let cell = this.#grid.cellAt(x, y);
         if (!cell.mine) {
           cell.mines = 0;
@@ -169,9 +172,7 @@ export default class {
     }
 
     if (this.#grid.sprites.filter(cell => !cell.opened).every(cell => cell.mine)) {
-      if (this.#onwin) {
-        this.#onwin();
-      }
+      this.#onwin();
     }
   }
 

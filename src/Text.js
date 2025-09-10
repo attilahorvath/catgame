@@ -6,19 +6,19 @@ export default class extends SpriteBatch {
   #segments;
 
   constructor(game) {
-    super(game, 'textures/font.png', LETTER_SIZE);
+    super(game, false, 'textures/font.png');
 
     this.#game = game;
     this.#segments = [];
   }
 
-  write(text, x, y, size, color = 'active', animations, delay) {
+  write(text, x, y, size, color = 'active', animations = null, delay = null) {
     if (x === 'center') {
-      x = Math.floor(this.#game.renderer.width / 2 - (Math.max(...text.split('\n').map(s => s.length)) * size) / 2);
+      x = Math.floor(this.#game.renderer.w / 2 - (Math.max(...text.split('\n').map(s => s.length)) * size) / 2);
     }
 
     if (y === 'center') {
-      y = Math.floor(this.#game.renderer.height / 2 - (text.split('\n').length * size) / 2);
+      y = Math.floor(this.#game.renderer.h / 2 - (text.split('\n').length * size) / 2);
     }
 
     const segment = new TextSegment(text, x, y, size, color, animations, delay);

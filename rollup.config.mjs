@@ -18,9 +18,7 @@ export default {
       ],
       preventAssignment: true,
 
-      LETTER_SIZE: '16.0',
-      CELL_SIZE: '16.0',
-      BUTTON_SIZE: '16.0',
+      IMAGE_SIZE: '16.0',
 
       POSITION_ATTRIBUTE_LOCATION: '0',
       COLOR_ATTRIBUTE_LOCATION: '1',
