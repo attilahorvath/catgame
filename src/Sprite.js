@@ -80,38 +80,8 @@ export default class {
       this.b = 0.0;
       break;
 
-    // TODO: Choose darker primary colors that are easily readable on the primary background
     case 'primary1':
       this.#fromRGB(144, 168, 195);
-      break;
-    case 'primary2':
-      this.#fromRGB(70, 157, 137);
-      break;
-    case 'primary3':
-      this.#fromRGB(181, 201, 154);
-      break;
-    case 'primary4':
-      this.#fromRGB(0, 166, 251);
-      break;
-    case 'primary5':
-      this.#fromRGB(76, 201, 240);
-      break;
-    case 'primary6':
-      this.#fromRGB(244, 202, 224);
-      break;
-    case 'primary7':
-      this.#fromRGB(229, 0, 164);
-      break;
-    case 'primary8':
-      this.#fromRGB(242, 0, 137);
-      break;
-    case 'primary9':
-      this.#fromRGB(255, 255, 255);
-      break;
-    case 'primary10':
-      this.r = 1.0;
-      this.g = 0.8;
-      this.b = 0.94;
       break;
 
     case 'inactive1':

@@ -11,6 +11,4 @@ out vec4 fragmentColor;
 
 void main() {
   fragmentColor = texture(tex, texCoord) * tint;
-
-  // if (fragmentColor.a == 0.0) discard;
 }

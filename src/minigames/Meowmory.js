@@ -23,8 +23,8 @@ export default class {
     this.#game = game;
     this.#onwin = onwin;
 
-    const w = this.#game.renderer.horizontal ? 6 : 5;
-    const h = this.#game.renderer.horizontal ? 5 : 6;
+    const w = game.renderer.horizontal ? 6 : 5;
+    const h = game.renderer.horizontal ? 5 : 6;
 
     const spacing = 16;
 

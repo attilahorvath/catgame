@@ -6,7 +6,7 @@ export default class extends SpriteBatch {
   #segments;
 
   constructor(game) {
-    super(game, false, 'textures/font.png');
+    super(game, false, 'font');
 
     this.#game = game;
     this.#segments = [];

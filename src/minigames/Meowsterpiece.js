@@ -38,9 +38,9 @@ export default class {
 
     const spacing = 2;
 
-    const s = Math.floor(Math.min((this.#game.renderer.w - 20) / this.#w - (spacing * (this.#w - 1) / this.#w), (this.#game.renderer.h - 110) / this.#h - (spacing * (this.#h - 1) / this.#h)));
+    const s = Math.floor(Math.min((game.renderer.w - 20) / this.#w - (spacing * (this.#w - 1) / this.#w), (game.renderer.h - 110) / this.#h - (spacing * (this.#h - 1) / this.#h)));
 
-    this.#grid = new Grid(this.#game, 'center', 100, this.#w, this.#h, s, spacing, spacing, (cell) => this.#click(cell));
+    this.#grid = new Grid(game, 'center', 100, this.#w, this.#h, s, spacing, spacing, (cell) => this.#click(cell));
 
     for (let x = 0; x < this.#w; x++) {
       for (let y = 0; y < this.#maxColumns; y++) {
@@ -48,7 +48,7 @@ export default class {
         if (x < this.#maxRows || y < this.#maxColumns - this.#columns[x - this.#maxRows].length) {
           cell.hidden = true;
         } else {
-          cell.write(this.#game.text, this.#columns[x - this.#maxRows][y - (this.#maxColumns - this.#columns[x - this.#maxRows].length)], s * 2 / 3, 'highlight');
+          cell.write(game.text, this.#columns[x - this.#maxRows][y - (this.#maxColumns - this.#columns[x - this.#maxRows].length)], s * 2 / 3, 'highlight');
           cell.activate(false);
         }
       }
@@ -60,25 +60,23 @@ export default class {
         if (y < this.#maxColumns || x < this.#maxRows - this.#rows[y - this.#maxColumns].length) {
           cell.hidden = true;
         } else {
-          cell.write(this.#game.text, this.#rows[y - this.#maxColumns][x - (this.#maxRows - this.#rows[y - this.#maxColumns].length)], this.#grid.s * 2 / 3, 'highlight');
+          cell.write(game.text, this.#rows[y - this.#maxColumns][x - (this.#maxRows - this.#rows[y - this.#maxColumns].length)], this.#grid.s * 2 / 3, 'highlight');
           cell.activate(false);
         }
       }
     }
 
-    this.#buttons = new Grid(this.#game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonClick(button));
+    this.#buttons = new Grid(game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
     this.#markButton = this.#buttons.sprites[0];
-    this.#markButton.write(this.#game.text, 'O', 30, 'active');
+    this.#markButton.write(game.text, 'O', 30, 'active');
 
     this.#flagButton = this.#buttons.sprites[1];
-    this.#flagButton.write(this.#game.text, 'X', 30, 'active');
+    this.#flagButton.write(game.text, 'X', 30, 'active');
 
     this.#setMode('mark');
 
     this.#grid.changed();
-
-    this.#game.text.write('MEOWSTERPIECE', 'center', 10, 48, 'inactive', ['sine']);
   }
 
   update() {
@@ -168,7 +166,7 @@ export default class {
             if (current > this.#columns[x - this.#maxRows][index]) {
               this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor('highlight');
             } else if (current === this.#columns[x - this.#maxRows][index]) {
-              this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor('primary3');
+              this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor('primary1');
               correct += 1;
             }
 
@@ -203,7 +201,7 @@ export default class {
             if (current > this.#rows[y - this.#maxColumns][index]) {
               this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor('highlight');
             } else if (current === this.#rows[y - this.#maxColumns][index]) {
-              this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor('primary3');
+              this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor('primary1');
               correct += 1;
             }
 

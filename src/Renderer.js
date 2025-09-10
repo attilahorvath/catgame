@@ -8,7 +8,6 @@ export default class {
   #shaders;
   #textures;
   #images;
-  // projection;
   #currentShader;
   #currentVao;
   #currentTexture;
@@ -38,9 +37,7 @@ export default class {
       this.#gl.viewport(0, 0, this.w, this.h);
       this.projection = Matrix3.ortho(0, this.w, this.h, 0);
 
-      if (this.#onresize) {
-        this.#onresize();
-      }
+      this.#onresize();
     }).observe(this.canvas, { box: 'content-box' });
 
     document.body.appendChild(this.canvas);
@@ -113,7 +110,8 @@ export default class {
     }
   }
 
-  loadTexture(path, smooth) {
+  loadTexture(name, smooth) {
+    const path = `textures/${name}.png`;
     const cachedTexture = this.#textures.get(`${path}_${smooth}`);
 
     if (cachedTexture) {
@@ -144,7 +142,7 @@ export default class {
       shader.use(this.#gl, this.view, this.projection);
       this.#currentShader = shader;
     } else {
-      this.#currentShader.setUniforms(this.#gl, this.view, this.projection);
+      this.#currentShader.setup(this.#gl, this.view, this.projection);
     }
 
     if (vao !== this.#currentVao) {

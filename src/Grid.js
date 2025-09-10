@@ -10,16 +10,16 @@ export default class extends SpriteBatch {
   #pressed;
 
   constructor(game, x, y, w, h, s, spacingX, spacingY, onclick, color = 'primary', type = 0) {
-    super(game, false, 'textures/cells.png');
+    super(game, false, 'cells');
 
     this.#game = game;
 
     if (x === 'center') {
-      x = this.#game.renderer.w / 2 - w * (s + (spacingX ?? 0) * (w - 1) / w) / 2;
+      x = game.renderer.w / 2 - w * (s + (spacingX ?? 0) * (w - 1) / w) / 2;
     }
 
     if (y === 'center') {
-      y = this.#game.renderer.h / 2 - h * (s + (spacingY ?? 0) * (h - 1) / h) / 2;
+      y = game.renderer.h / 2 - h * (s + (spacingY ?? 0) * (h - 1) / h) / 2;
     }
 
     this.x = x;
@@ -34,7 +34,7 @@ export default class extends SpriteBatch {
 
     for (let gridY = 0; gridY < h; gridY++) {
       for (let gridX = 0; gridX < w; gridX++) {
-        const cell = this.add(this.x + gridX * this.#fullW, this.y + gridY * this.#fullH, s, type, color);
+        const cell = this.add(x + gridX * this.#fullW, y + gridY * this.#fullH, s, type, color);
         cell.setColor(color);
         cell.gridX = gridX;
         cell.gridY = gridY;
@@ -51,7 +51,7 @@ export default class extends SpriteBatch {
         }
 
         if (newActive !== this.#active && !this.#pressed) {
-          if (this.onactivate || this.#onclick) {
+          if (this.#onclick) {
             if (this.#game.input.mouse) {
               if (!this.#active?.inactive) {
                 this.#active?.setColor(this.#active?.baseColor || this.#color);
@@ -61,11 +61,6 @@ export default class extends SpriteBatch {
               this.changed();
             }
           }
-
-          // if (this.onactivate) {
-          //   this.onactivate(newActive, this.#active);
-          //   this.changed();
-          // }
         }
 
         this.#active = newActive;
@@ -74,17 +69,12 @@ export default class extends SpriteBatch {
       if (this.#game.input.press) {
         this.#pressed = this.#active;
 
-        if (this.onpress || this.#onclick) {
+        if (this.#onclick) {
           if (this.#game.input.mouse) {
             this.#pressed?.setColor('active');
             this.changed();
           }
         }
-
-        // if (this.onpress) {
-        //   this.onpress(this.#pressed);
-        //   this.changed();
-        // }
       }
 
       if (this.#game.input.click()) {

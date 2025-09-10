@@ -29,24 +29,24 @@ export default class {
     this.#firstStart = game.firstStart;
     game.firstStart = false;
 
-    this.#grid = new Grid(this.#game, 'center', 100, 6, 15, 128, 0, 0, null, '', 2);
+    this.#grid = new Grid(game, 'center', 100, 6, 15, 128, 0, 0, null, '', 2);
     this.#grid.disabled = true;
 
-    this.#buttons = new Grid(this.#game, 'center', 132, 3, 7, 128, 64, 64, (button) => this.#buttonClick(button), '', 1);
+    this.#buttons = new Grid(game, 'center', 132, 3, 7, 128, 64, 64, (button) => this.#buttonClick(button), '', 1);
 
     if (this.#firstStart) {
       this.#buttons.disabled = true;
-      this.#camY = -this.#game.renderer.h;
-      this.#game.text.write('THIS IS A TRUE STORY\n\n\nTHE CATS DEPICTED HERE\nALL LIVE IN DUBLIN', 'center', 'center', 32, 'inactive', ['typing', 'shake']);
-      this.#game.scheduleTimer(9000, () => {
+      this.#camY = -game.renderer.h;
+      game.text.write('THIS IS A TRUE STORY\n\n\nTHE CATS DEPICTED HERE\nALL LIVE IN DUBLIN', 'center', 'center', 32, 'inactive', ['typing', 'shake']);
+      game.scheduleTimer(9000, () => {
         this.#startBlackCat = true;
-        this.#game.text.clear();
+        game.text.clear();
       });
     } else {
-      this.#game.text.write('HELP THE OTHER CATS\nIN THE BUILDING!!', 'center', 10, 32, 'active', ['typing', 'shake']);
+      game.text.write('HELP THE OTHER CATS\nIN THE BUILDING!!', 'center', 10, 32, 'active', ['typing', 'shake']);
     }
 
-    this.#spriteBatch = new SpriteBatch(this.#game);
+    this.#spriteBatch = new SpriteBatch(game);
 
     const minigames = [PawPawToe, Meowmory, Meowsweeper, Sudocat, Meowsterpiece];
 
@@ -56,7 +56,7 @@ export default class {
         let sx = minigames[i].sx;
         let sy = 73;
         let type = minigames[i].type;
-        if (this.#game.minigamesWon.has(minigames[i])) {
+        if (game.minigamesWon.has(minigames[i])) {
           this.#buttons.sprites[i].activate(false);
           sx = 39;
           sy = 39;
@@ -72,7 +72,7 @@ export default class {
 
     for (let i = 0; i < this.#buttons.sprites.length; i++) {
       const button = this.#buttons.sprites[i];
-      if (this.#game.minigamesWon.has(button.minigame)) {
+      if (game.minigamesWon.has(button.minigame)) {
         button.activate(false);
       }
     }

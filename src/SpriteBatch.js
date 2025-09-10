@@ -11,7 +11,7 @@ export default class {
   #texture;
   #spritesChanged;
 
-  constructor(game, smooth = false, texturePath = 'textures/sprites.png') {
+  constructor(game, smooth = false, textureName = 'sprites') {
     this.#game = game;
 
     this.#shader = this.#game.renderer.createShader('sprite', vertexShaderSource, fragmentShaderSource);
@@ -31,7 +31,7 @@ export default class {
     this.#game.renderer.setAttribute(SPRITE_COLOR_ATTRIBUTE_LOCATION, 4, 36, 16, 1);
     this.#game.renderer.setAttribute(SPRITE_ANGLE_ATTRIBUTE_LOCATION, 1, 36, 32, 1);
 
-    this.#texture = this.#game.renderer.loadTexture(texturePath, smooth);
+    this.#texture = this.#game.renderer.loadTexture(textureName, smooth);
 
     this.sprites = [];
     this.changed();

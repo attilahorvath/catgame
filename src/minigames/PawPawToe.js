@@ -23,8 +23,8 @@ export default class {
     this.#onwin = onwin;
     this.#onlose = onlose;
 
-    this.#grid = new Grid(this.#game, 'center', 'center', 3, 3, 96, 20, 20, (cell) => this.#click(cell));
-    this.#spriteBatch = new SpriteBatch(this.#game);
+    this.#grid = new Grid(game, 'center', 'center', 3, 3, 96, 20, 20, (cell) => this.#click(cell));
+    this.#spriteBatch = new SpriteBatch(game);
   }
 
   update() {

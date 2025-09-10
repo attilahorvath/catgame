@@ -28,30 +28,27 @@ export default class {
     this.#onwin = onwin;
     this.#onlose = onlose;
 
-    this.#w = this.#game.renderer.horizontal ? 20 : 10;
-    this.#h = this.#game.renderer.horizontal ? 10 : 20;
+    this.#w = game.renderer.horizontal ? 20 : 10;
+    this.#h = game.renderer.horizontal ? 10 : 20;
     this.#mines = 10;
 
     this.#fontSize = 26;
 
     const spacing = 4;
 
-    const s = Math.floor(Math.min((this.#game.renderer.w - 20) / this.#w - (spacing * (this.#w - 1) / this.#w), (this.#game.renderer.h - 110) / this.#h - (spacing * (this.#h - 1) / this.#h)));
+    const s = Math.floor(Math.min((game.renderer.w - 20) / this.#w - (spacing * (this.#w - 1) / this.#w), (game.renderer.h - 110) / this.#h - (spacing * (this.#h - 1) / this.#h)));
 
-    this.#grid = new Grid(this.#game, 'center', 100, this.#w, this.#h, s, spacing, spacing, (cell) => this.#click(cell));
+    this.#grid = new Grid(game, 'center', 100, this.#w, this.#h, s, spacing, spacing, (cell) => this.#click(cell));
 
-    this.#buttons = new Grid(this.#game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonClick(button));
+    this.#buttons = new Grid(game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
     this.#digButton = this.#buttons.sprites[0];
-    this.#digButton.write(this.#game.text, 'O', 30, 'active');
+    this.#digButton.write(game.text, 'O', 30, 'active');
 
     this.#flagButton = this.#buttons.sprites[1];
-    this.#flagButton.write(this.#game.text, 'X', 30, 'active');
+    this.#flagButton.write(game.text, 'X', 30, 'active');
 
     this.#setMode('dig');
-
-    this.#game.text.write('MEOWSWEEPER', 'center', 10, 48, 'inactive', ['sine']);
-    // this.#game.text.write('SCRATCH MY BACK, BUT\nONLY WHERE I LIKE IT!', 50, 525, 32, 'active', ['typing', 'shake']);
   }
 
   update() {

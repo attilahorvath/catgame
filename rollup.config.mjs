@@ -16,7 +16,7 @@ export default {
         'src/**/*.js',
         'shaders/**/*.{vert,frag}'
       ],
-      preventAssignment: true,
+      preventAssignment: false,
 
       IMAGE_SIZE: '16.0',
 
@@ -27,7 +27,51 @@ export default {
       SPRITE_SIZE_ATTRIBUTE_LOCATION: '4',
       SPRITE_TYPE_ATTRIBUTE_LOCATION: '5',
       SPRITE_COLOR_ATTRIBUTE_LOCATION: '6',
-      SPRITE_ANGLE_ATTRIBUTE_LOCATION: '7'
+      SPRITE_ANGLE_ATTRIBUTE_LOCATION: '7',
+
+      'imageSize': 'is',
+
+      'vertexPosition': 'vp',
+      'vertexTexCoord': 'vt',
+      'spritePosition': 'sp',
+      'spriteSize': 'ss',
+      'spriteType': 'st',
+      'spriteColor': 'sc',
+      'spriteAngle': 'sa',
+
+      'texCoord': 'tc',
+      'fragmentColor': 'fc',
+
+      'update': 'u',
+      'draw': 'd',
+      'write': 'w',
+      // 'clear': 'c',
+
+      'setColor': 'cc',
+      'setBaseColor': 'cb',
+
+      'catName': 'cn',
+      'catText': 'ct',
+      'response': 'cr',
+
+      'scheduleTimer': 'tt',
+
+      'setAttribute': 'a',
+      'changed': 'c',
+
+      // 'renderer': 'r',
+      // 'text': 't',
+
+      'view': 'v',
+      'projection': 'p',
+
+      'center': 'c',
+
+      'blackcat': 'bc',
+      'orangecat': 'oc',
+      'whitecat': 'wc',
+      'tabbycat': 'tc',
+      'silvercat': 'sc',
     }),
     glsl({
       include: 'shaders/**/*.{vert,frag}'

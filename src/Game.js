@@ -91,20 +91,6 @@ export default class {
       this.renderer.view[7] = 0;
     }
 
-    // this.renderer.view[0] += 0.005;
-    // this.renderer.view[4] += 0.005;
-
-    // this.renderer.view[6] -= 1;
-    // this.renderer.view[7] -= 1;
-
-    // this.w ||= 1000;
-    // this.h ||= 1000;
-
-    // this.w -= 1;
-    // this.h -= 1;
-
-    // this.renderer.projection = Matrix3.ortho(100, this.renderer.w - 100, this.renderer.h - 100, 100);
-
     this.input.update();
 
     if (this.input.mouse && this.#cursor.hidden) {

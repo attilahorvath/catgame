@@ -13,14 +13,14 @@ export default class {
     const w = 10;
     const h = 10;
 
-    const s = Math.floor(Math.min((this.#game.renderer.w - 20) / w, (this.#game.renderer.h - 110) / h));
+    const s = Math.floor(Math.min((game.renderer.w - 20) / w, (game.renderer.h - 110) / h));
 
-    this.#grid = new Grid(this.#game, 'center', 100, w, h, s, 0, 0, (cell) => this.#click(cell));
+    this.#grid = new Grid(game, 'center', 100, w, h, s, 0, 0, (cell) => this.#click(cell));
 
     for (let i = 0; i < w * h; i++) {
       const cell = this.#grid.sprites[i];
       cell.index = i;
-      cell.write(this.#game.text, i, 12, 'highlight');
+      cell.write(game.text, i, 12, 'highlight');
     }
 
     for (let i = 0; i < (w * h) / 2; i++) {
@@ -29,8 +29,6 @@ export default class {
 
       this.#swap(cellA, cellB);
     }
-
-    this.#game.text.write('JIGSPAW', 'center', 10, 48, 'inactive', ['sine']);
   }
 
   update() {

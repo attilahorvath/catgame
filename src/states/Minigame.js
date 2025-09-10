@@ -11,8 +11,8 @@ export default class {
   #cat;
   #leftPaw;
   #rightPaw;
-  #catName;
-  #catText;
+  #catNameText;
+  #catTextText;
   #exitButton;
   #exit;
   #catMet;
@@ -25,12 +25,12 @@ export default class {
   init(game) {
     this.#game = game;
 
-    this.#buttons = new Grid(this.#game, this.#game.renderer.w - 74, 10, 1, 1, 64, 0, 0, (button) => this.#buttonClick(button));
+    this.#buttons = new Grid(game, game.renderer.w - 74, 10, 1, 1, 64, 0, 0, (button) => this.#buttonClick(button));
 
     this.#exitButton = this.#buttons.sprites[0];
 
     this.#exitButton = this.#buttons.sprites[0];
-    this.#exitButton.write(this.#game.text, 'X', 32, 'active');
+    this.#exitButton.write(game.text, 'X', 32, 'active');
 
     this.#spriteBatch = new SpriteBatch(game);
 
@@ -38,8 +38,8 @@ export default class {
     this.#leftPaw = this.#spriteBatch.add(this.#cat.x - 12, this.#cat.y + 60, 24, 0, this.#minigameClass.color);
     this.#rightPaw = this.#spriteBatch.add(this.#cat.x + 46, this.#cat.y + 60, 24, 0, this.#minigameClass.color);
 
-    this.#catName = this.#game.text.write(this.#minigameClass.catName, 'center', 10, 24, this.#minigameClass.color, ['sine']);
-    this.#catText = this.#game.text.write(this.#minigameClass.catText, 'center', this.#cat.y + 100, 32, this.#minigameClass.color, ['typing', 'shake']);
+    this.#catNameText = game.text.write(this.#minigameClass.catName, 'center', 10, 24, this.#minigameClass.color, ['sine']);
+    this.#catTextText = game.text.write(this.#minigameClass.catText, 'center', this.#cat.y + 100, 32, this.#minigameClass.color, ['typing', 'shake']);
   }
 
   update() {
@@ -55,18 +55,18 @@ export default class {
       this.#leftPaw.setColor('blackcat');
       this.#rightPaw.setColor('blackcat');
       this.#spriteBatch.changed();
-      this.#catName.enabled = false;
-      this.#catText.enabled = false;
-      this.#catName = this.#game.text.write('VICKI', 'center', 10, 24, 'blackcat', ['sine']);
-      this.#catText = this.#game.text.write(this.#minigameClass.response, 'center', this.#cat.y + 100, 32, 'blackcat', ['typing', 'shake']);
+      this.#catNameText.enabled = false;
+      this.#catTextText.enabled = false;
+      this.#catNameText = this.#game.text.write('VICKI', 'center', 10, 24, 'blackcat', ['sine']);
+      this.#catTextText = this.#game.text.write(this.#minigameClass.response, 'center', this.#cat.y + 100, 32, 'blackcat', ['typing', 'shake']);
       this.#catMet = true;
     } else if (!this.#started && this.#game.input.click()) {
       this.#game.input.clickRead = true;
       this.#cat.enabled = false;
       this.#leftPaw.enabled = false;
       this.#rightPaw.enabled = false;
-      this.#catName.enabled = false;
-      this.#catText.enabled = false;
+      this.#catNameText.enabled = false;
+      this.#catTextText.enabled = false;
       this.#spriteBatch.changed();
       this.#game.text.write(this.#minigameClass.title, 'center', 10, 48, 'inactive', ['sine']);
       this.#setup();
