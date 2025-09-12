@@ -36,8 +36,8 @@ export default class {
           sprite.ds = -0.1 + Math.random() * 0.2;
         }
 
-        // this.#state = new Select();
-        this.#state = new Minigame(Meowjong);
+        this.#state = new Select();
+        // this.#state = new Minigame(Meowjong);
         this.#state.init(this);
         this.#started = true;
       }
@@ -55,7 +55,7 @@ export default class {
 
     this.minigamesWon = new Set();
 
-    // this.firstStart = true;
+    this.firstStart = true;
   }
 
   step(timestamp) {

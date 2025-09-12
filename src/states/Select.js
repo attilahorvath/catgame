@@ -30,10 +30,12 @@ export default class {
     this.#firstStart = game.firstStart;
     game.firstStart = false;
 
-    this.#grid = new Grid(game, 'center', 100, 6, 15, 128, 0, 0, null, '', 2);
+    const won = game.minigamesWon.size === 6;
+
+    this.#grid = new Grid(game, 'center', won ? 200 : 100, 6, 15, 128, 0, 0, null, '', 2);
     this.#grid.disabled = true;
 
-    this.#buttons = new Grid(game, 'center', 132, 3, 7, 128, 64, 64, (button) => this.#buttonClick(button), '', 1);
+    this.#buttons = new Grid(game, 'center', won ? 232 : 132, 3, 7, 128, 64, 64, (button) => this.#buttonClick(button), '', 1);
 
     if (this.#firstStart) {
       this.#buttons.disabled = true;
@@ -43,8 +45,13 @@ export default class {
         this.#startBlackCat = true;
         game.text.clear();
       });
-    } else {
+    } else if (!won) {
       game.text.write('HELP THE OTHER CATS\nIN THE BUILDING!!', 'center', 10, 32, ACTIVE_COLOR, ['typing', 'shake']);
+    } else {
+      game.text.write('CONGRATULATIONS!!', 'center', 10, 48, HIGHLIGHT_COLOR, ['sine']);
+      game.text.write("YOU'VE HELPED ALL THE CATS\nAND YOU'VE BEEN ACCEPTED BY", 'center', 75, 32, ACTIVE_COLOR, ['typing', 'shake']);
+      game.text.write('QUEEN KARA', 'center', 150, 32, TABBYCAT_COLOR, ['typing', 'sine'], 7000);
+      game.text.write('THANKS FOR PLAYING!!', 'center', 200, 32, INACTIVE_COLOR, ['typing', 'shake'], 10000);
     }
 
     this.#spriteBatch = new SpriteBatch(game);
