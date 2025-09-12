@@ -40,7 +40,7 @@ export default class {
 
     const s = Math.floor(Math.min((game.renderer.w - 20) / this.#w - (spacing * (this.#w - 1) / this.#w), (game.renderer.h - 110) / this.#h - (spacing * (this.#h - 1) / this.#h)));
 
-    this.#grid = new Grid(game, 'center', 100, this.#w, this.#h, s, spacing, spacing, (cell) => this.#click(cell));
+    this.#grid = new Grid(game, CENTER, 100, this.#w, this.#h, s, spacing, spacing, (cell) => this.#click(cell));
 
     this.#buttons = new Grid(game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
@@ -119,7 +119,7 @@ export default class {
           for (let dy = -1; dy <= 1; dy++) {
             for (let dx = -1; dx <= 1; dx++) {
               if (this.#grid.cellAt(x + dx, y + dy)?.mine) {
-                cell.mines += 1;
+                cell.mines++;
               }
             }
           }
@@ -144,13 +144,15 @@ export default class {
 
       cell.activate(false);
 
+      this.#game.particles.emit(cell.x + cell.grid.s / 2, cell.y + cell.grid.s / 2);
+
       if (cell.mines === 0) {
         cell.hidden = true;
 
-        this.#open(x, y - 1);
-        this.#open(x, y + 1);
-        this.#open(x - 1, y);
-        this.#open(x + 1, y);
+        this.#game.scheduleTimer(100, () => this.#open(x, y - 1));
+        this.#game.scheduleTimer(100, () => this.#open(x, y + 1));
+        this.#game.scheduleTimer(100, () => this.#open(x - 1, y));
+        this.#game.scheduleTimer(100, () => this.#open(x + 1, y));
       } else {
         if (cell.mine) {
           for (const mineCell of this.#grid.sprites.filter(cell => cell.mine)) {
@@ -161,6 +163,8 @@ export default class {
           cell.write(this.#game.text, cell.mines, this.#fontSize, INACTIVE1_COLOR + (cell.mines - 1));
         }
       }
+
+      this.#grid.changed();
     }
 
     if (this.#grid.sprites.filter(cell => !cell.opened).every(cell => cell.mine)) {

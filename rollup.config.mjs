@@ -62,8 +62,10 @@ export default {
 
       'view': 'v',
       'projection': 'p',
+      'horizontal': 'o',
+      'symbol': 'm',
 
-      'center': 'c',
+      CENTER: -1,
 
       PRIMARY_COLOR: '0',
       BACKGROUND_COLOR: '1',
@@ -89,6 +91,10 @@ export default {
       INACTIVE10_COLOR: '19',
 
       VOID_COLOR: '20',
+
+      SINE_ANIMATION: '0',
+      SHAKE_ANIMATION: '1',
+      TYPING_ANIMATION: '2',
     }),
     glsl({
       include: 'shaders/**/*.{vert,frag}'

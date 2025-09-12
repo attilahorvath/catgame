@@ -15,7 +15,7 @@ export default class {
 
     const s = Math.floor(Math.min((game.renderer.w - 20) / w, (game.renderer.h - 110) / h));
 
-    const grid = new Grid(game, 'center', 100, w, h, s, 0, 0, (cell) => this.#click(cell));
+    const grid = new Grid(game, CENTER, 100, w, h, s, 0, 0, (cell) => this.#click(cell));
 
     for (let i = 0; i < w * h; i++) {
       const cell = grid.sprites[i];

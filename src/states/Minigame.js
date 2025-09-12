@@ -21,6 +21,7 @@ export default class {
   #lost;
   #lostText;
   #lostTextInfo;
+  #timer;
 
   constructor(minigameClass) {
     this.#minigameClass = minigameClass;
@@ -40,12 +41,12 @@ export default class {
 
     const [_title, color, _sx, _type, catName, catText, _response] = this.#minigameClass.meta;
 
-    this.#cat = this.#spriteBatch.add('center', 100, 64, 1, color);
+    this.#cat = this.#spriteBatch.add(CENTER, 100, 64, 1, color);
     this.#leftPaw = this.#spriteBatch.add(this.#cat.x - 12, this.#cat.y + 60, 24, 0, color);
     this.#rightPaw = this.#spriteBatch.add(this.#cat.x + 46, this.#cat.y + 60, 24, 0, color);
 
-    this.#catNameText = game.text.write(catName, 'center', 10, 24, color, ['sine']);
-    this.#catTextText = game.text.write(catText, 'center', this.#cat.y + 100, 32, color, ['typing', 'shake']);
+    this.#catNameText = game.text.write(catName, CENTER, 10, 24, color, [SINE_ANIMATION]);
+    this.#catTextText = game.text.write(catText, CENTER, this.#cat.y + 100, 32, color, [TYPING_ANIMATION, SHAKE_ANIMATION]);
   }
 
   update() {
@@ -65,8 +66,8 @@ export default class {
       this.#spriteBatch.changed();
       this.#catNameText.enabled = false;
       this.#catTextText.enabled = false;
-      this.#catNameText = this.#game.text.write('VICKI', 'center', 10, 24, BLACKCAT_COLOR, ['sine']);
-      this.#catTextText = this.#game.text.write(response, 'center', this.#cat.y + 100, 32, BLACKCAT_COLOR, ['typing', 'shake']);
+      this.#catNameText = this.#game.text.write('VICKI', CENTER, 10, 24, BLACKCAT_COLOR, [SINE_ANIMATION]);
+      this.#catTextText = this.#game.text.write(response, CENTER, this.#cat.y + 100, 32, BLACKCAT_COLOR, [TYPING_ANIMATION, SHAKE_ANIMATION]);
       this.#catMet = true;
     } else if (!this.#started && this.#game.input.click()) {
       this.#game.input.clickRead = true;
@@ -76,7 +77,6 @@ export default class {
       this.#catNameText.enabled = false;
       this.#catTextText.enabled = false;
       this.#spriteBatch.changed();
-      this.#game.text.write(title, 'center', 10, 48, INACTIVE_COLOR, ['sine']);
       this.#setup();
       this.#started = true;
     }
@@ -88,6 +88,7 @@ export default class {
     this.#spriteBatch.update();
 
     if (this.#won && this.#game.input.click()) {
+      this.#timer.disabled = true;
       this.#exit = true;
     }
 
@@ -116,6 +117,8 @@ export default class {
 
     this.#minigame = new this.#minigameClass(this.#game, () => this.#win(), () => this.#lose());
 
+    this.#game.text.write(this.#minigameClass.meta[0], CENTER, 10, 48, INACTIVE_COLOR, [SINE_ANIMATION]);
+
     this.#exitButton = this.#buttons.sprites[0];
     this.#exitButton.write(this.#game.text, 'X', 32, ACTIVE_COLOR);
   }
@@ -125,16 +128,18 @@ export default class {
     this.#game.minigamesWon.add(this.#minigameClass);
 
     const texts = ['CONGRATS!!', 'WELL DONE!!', 'GOOD JOB!!', 'PAWSOME!!', 'AMEOWZING!!'];
-    const text = this.#game.text.write(texts[Math.floor(Math.random() * texts.length)], 'center', 'center', 48, HIGHLIGHT_COLOR, ['sine']);
-    this.#game.text.write('NOW GO HELP THE OTHER CATS!', 'center', text.y + 75, 32, ACTIVE_COLOR, ['typing', 'shake'], 1200);
+    const text = this.#game.text.write(texts[Math.floor(Math.random() * texts.length)], CENTER, CENTER, 48, HIGHLIGHT_COLOR, [SINE_ANIMATION]);
+    this.#game.text.write('NOW GO HELP THE OTHER CATS!', CENTER, text.y + 75, 32, ACTIVE_COLOR, [TYPING_ANIMATION, SHAKE_ANIMATION], 1200);
+
+    this.#timer = this.#game.scheduleTimer(400, () => this.#game.particles.emit(Math.random() * this.#game.renderer.w, Math.random() * this.#game.renderer.h, true, 256, 1000), true);
   }
 
   #lose() {
     this.#lost = true;
 
     const texts = ['OOPS!!', 'BETTER LUCK NEXT TIME!!', 'OH WELL!!'];
-    this.#lostText = this.#game.text.write(texts[Math.floor(Math.random() * texts.length)], 'center', 'center', 48, HIGHLIGHT_COLOR, ['sine']);
-    this.#lostTextInfo = this.#game.text.write("LET'S TRY AGAIN!", 'center', this.#lostText.y + 75, 32, ACTIVE_COLOR, ['typing', 'shake'], 1200);
+    this.#lostText = this.#game.text.write(texts[Math.floor(Math.random() * texts.length)], CENTER, CENTER, 48, HIGHLIGHT_COLOR, [SINE_ANIMATION]);
+    this.#lostTextInfo = this.#game.text.write("LET'S TRY AGAIN!", CENTER, this.#lostText.y + 75, 32, ACTIVE_COLOR, [TYPING_ANIMATION, SHAKE_ANIMATION], 1200);
   }
 
   #buttonClick(button) {

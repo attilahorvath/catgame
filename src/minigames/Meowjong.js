@@ -29,7 +29,7 @@ export default class {
 
     this.#grids = [];
 
-    const baseGrid = new Grid(game, 'center', 100, w, h, s, 0, 0, (cell) => this.#click(cell), INACTIVE3_COLOR);
+    const baseGrid = new Grid(game, CENTER, 100, w, h, s, 0, 0, (cell) => this.#click(cell), INACTIVE3_COLOR);
     baseGrid.spriteBatch = new SpriteBatch(game, true);
 
     for (let [x, y] of [[0, 1], [1, 1], [0, 2], [0, 5], [0, 6], [1, 6], [10, 1], [11, 1], [11, 2], [11, 5], [10, 6], [11, 6]]) {
@@ -113,8 +113,10 @@ export default class {
       cell.setBaseColor(cell.grid.color);
       this.#selected = null;
     } else if (this.#selected && freeCell && this.#selected.symbol === cell.symbol) {
+      this.#game.particles.emit(this.#selected.x + this.#selected.grid.s / 2, this.#selected.y + this.#selected.grid.s / 2);
+      this.#game.particles.emit(cell.x + cell.grid.s / 2, cell.y + cell.grid.s / 2);
       this.#game.shake(200);
-      
+
       this.#selected.activate(false);
       this.#selected.hidden = true;
       this.#selected.content.enabled = false;

@@ -42,7 +42,7 @@ export default class {
 
     const s = Math.floor(Math.min((game.renderer.w - 20) / this.#w - (spacing * (this.#w - 1) / this.#w), (game.renderer.h - 110) / this.#h - (spacing * (this.#h - 1) / this.#h)));
 
-    this.#grid = new Grid(game, 'center', 100, this.#w, this.#h, s, spacing, spacing, (cell) => this.#click(cell));
+    this.#grid = new Grid(game, CENTER, 100, this.#w, this.#h, s, spacing, spacing, (cell) => this.#click(cell));
 
     for (let x = 0; x < this.#w; x++) {
       for (let y = 0; y < this.#maxColumns; y++) {
@@ -160,7 +160,7 @@ export default class {
 
       for (let y = this.#maxColumns; y < this.#h; y++) {
         if (this.#grid.cellAt(x, y).state === 'marked') {
-          current += 1;
+          current++;
         }
 
         if (this.#grid.cellAt(x, y).state !== 'marked' || y === this.#h - 1) {
@@ -169,10 +169,10 @@ export default class {
               this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor(HIGHLIGHT_COLOR);
             } else if (current === this.#columns[x - this.#maxRows][index]) {
               this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor(INACTIVE1_COLOR);
-              correct += 1;
+              correct++;
             }
 
-            index += 1;
+            index++;
           }
 
           current = 0;
@@ -180,7 +180,7 @@ export default class {
       }
 
       if (correct === this.#columns[x - this.#maxRows].length) {
-        gridCorrect += 1;
+        gridCorrect++;
       }
     }
 
@@ -195,7 +195,7 @@ export default class {
 
       for (let x = this.#maxRows; x < this.#w; x++) {
         if (this.#grid.cellAt(x, y).state === 'marked') {
-          current += 1;
+          current++;
         }
 
         if (this.#grid.cellAt(x, y).state !== 'marked' || x === this.#w - 1) {
@@ -204,10 +204,10 @@ export default class {
               this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor(HIGHLIGHT_COLOR);
             } else if (current === this.#rows[y - this.#maxColumns][index]) {
               this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor(INACTIVE1_COLOR);
-              correct += 1;
+              correct++;
             }
 
-            index += 1;
+            index++;
           }
 
           current = 0;
@@ -215,7 +215,7 @@ export default class {
       }
 
       if (correct === this.#rows[y - this.#maxColumns].length) {
-        gridCorrect += 1;
+        gridCorrect++;
       }
     }
 

@@ -13,11 +13,11 @@ export default class extends SpriteBatch {
   }
 
   write(text, x, y, s, color = ACTIVE_COLOR, animations = null, delay = null) {
-    if (x === 'center') {
+    if (x === CENTER) {
       x = Math.floor(this.#game.renderer.w / 2 - (Math.max(...text.split('\n').map(s => s.length)) * s) / 2);
     }
 
-    if (y === 'center') {
+    if (y === CENTER) {
       y = Math.floor(this.#game.renderer.h / 2 - (text.split('\n').length * s) / 2);
     }
 

@@ -45,7 +45,7 @@ export default class {
       }
     }
 
-    this.#buttons = new Grid(game, 'center', game.renderer.h - 74, 10, 1, 64, 10, 0, (button) => this.#buttonClick(button));
+    this.#buttons = new Grid(game, CENTER, game.renderer.h - 74, 10, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
     for (let digit = 1; digit <= 10; digit++) {
       const button = this.#buttons.sprites[digit - 1];

@@ -2,6 +2,7 @@ import Renderer from './Renderer';
 import Input from './Input';
 
 import Text from './Text';
+import Particles from './Particles';
 import SpriteBatch from './SpriteBatch';
 import Select from './states/Select';
 import Minigame from './states/Minigame';
@@ -9,6 +10,7 @@ import Matrix3 from './Matrix3';
 import PawPawToe from './minigames/PawPawToe';
 import Meowmory from './minigames/Meowmory';
 import Meowjong from './minigames/Meowjong';
+import Meowsweeper from './minigames/Meowsweeper';
 
 export default class {
   #started;
@@ -49,6 +51,7 @@ export default class {
     this.#backgroundBatch = new SpriteBatch(this, true);
 
     this.text = new Text(this);
+    this.particles = new Particles(this);
     this.#spriteBatch = new SpriteBatch(this);
     this.#cursor = this.#spriteBatch.add(0, 0, 26, 0, BLACKCAT_COLOR);
     this.#cursor.hidden = true;
@@ -65,6 +68,8 @@ export default class {
 
     if (this.#nextState) {
       this.text.clear();
+      this.particles.clear();
+
       this.#state = this.#nextState;
       this.#state.init(this);
       this.#nextState = null;
@@ -152,6 +157,7 @@ export default class {
     }
 
     this.text.update(timestamp);
+    this.particles.update(timestamp);
     this.#spriteBatch.update();
   }
 
@@ -192,5 +198,7 @@ export default class {
     this.text.draw();
     this.#spriteBatch.draw();
     this.renderer.projection = currProjection;
+
+    this.particles.draw();
   }
 }

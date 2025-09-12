@@ -110,8 +110,8 @@ export default class {
     }
   }
 
-  loadTexture(name, smooth) {
-    const path = `textures/${name}.png`;
+  fetchTexture(filename, smooth) {
+    const path = filename ? `textures/${filename}.png` : 'blank';
     const cachedTexture = this.#textures.get(`${path}_${smooth}`);
 
     if (cachedTexture) {
@@ -121,14 +121,17 @@ export default class {
     const texture = this.#gl.createTexture();
     this.#prepareTexture(texture, null, smooth);
 
-    const imageIndex = this.#images.length;
-    const image = new Image();
+    if (filename) {
+      const imageIndex = this.#images.length;
+      const image = new Image();
 
-    image.src = path;
-    image.onload = () => this.#prepareTexture(texture, imageIndex, smooth);
+      image.src = path;
+      image.onload = () => this.#prepareTexture(texture, imageIndex, smooth);
+
+      this.#images[imageIndex] = image;
+    }
 
     this.#textures.set(`${path}_${smooth}`, texture);
-    this.#images[imageIndex] = image;
 
     return texture;
   }
@@ -191,7 +194,7 @@ export default class {
     if (imageIndex != null) {
       texImage2D(texture2d, 0, rgba, rgba, unsignedByte, this.#images[imageIndex]);
     } else {
-      texImage2D(texture2d, 0, rgba, 1, 1, 0, rgba, unsignedByte, new Uint8Array([255, 0, 255, 255,]));
+      texImage2D(texture2d, 0, rgba, 1, 1, 0, rgba, unsignedByte, new Uint8Array([255, 255, 255, 255,]));
     }
 
     texParameteri(texture2d, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);

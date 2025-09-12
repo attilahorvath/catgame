@@ -26,15 +26,15 @@ export default class {
 
     for (const animation of this.animations) {
       switch (animation) {
-      case 'sine':
+      case SINE_ANIMATION:
         for (let i = 0; i < this.sprites.length; i++) {
           const sprite = this.sprites[i];
           sprite.y = sprite.baseY + Math.sin(i + timestamp / 200) * 10;
         }
         updated = true;
         break;
-      case 'shake':
-        this.time += 1;
+      case SHAKE_ANIMATION:
+        this.time++;
 
         if (this.time === 7) {
           this.time = 0;
@@ -46,7 +46,7 @@ export default class {
         }
         updated = true;
         break;
-      case 'typing':
+      case TYPING_ANIMATION:
         if (!this.begin) {
           this.begin = timestamp;
         }

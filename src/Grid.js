@@ -5,7 +5,6 @@ export default class extends SpriteBatch {
   #spacingX;
   #spacingY;
   #onclick;
-  // #color;
   #active;
   #pressed;
 
@@ -14,11 +13,11 @@ export default class extends SpriteBatch {
 
     this.#game = game;
 
-    if (x === 'center') {
+    if (x === CENTER) {
       x = game.renderer.w / 2 - w * (s + (spacingX ?? 0) * (w - 1) / w) / 2;
     }
 
-    if (y === 'center') {
+    if (y === CENTER) {
       y = game.renderer.h / 2 - h * (s + (spacingY ?? 0) * (h - 1) / h) / 2;
     }
 

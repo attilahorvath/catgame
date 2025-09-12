@@ -11,7 +11,7 @@ export default class {
   #texture;
   #spritesChanged;
 
-  constructor(game, smooth = false, textureName = 'sprites') {
+  constructor(game, smooth = false, textureFilename = 'sprites') {
     this.#game = game;
     const renderer = game.renderer;
 
@@ -31,18 +31,18 @@ export default class {
     renderer.setAttribute(SPRITE_TYPE_ATTRIBUTE_LOCATION, 1, 32, 12, 1);
     renderer.setAttribute(SPRITE_COLOR_ATTRIBUTE_LOCATION, 4, 32, 16, 1);
 
-    this.#texture = renderer.loadTexture(textureName, smooth);
+    this.#texture = renderer.fetchTexture(textureFilename, smooth);
 
     this.sprites = [];
     this.changed();
   }
 
   add(x, y, s, type, color) {
-    if (x === 'center') {
+    if (x === CENTER) {
       x = this.#game.renderer.w / 2 - s / 2;
     }
 
-    if (y === 'center') {
+    if (y === CENTER) {
       y = this.#game.renderer.h / 2 - s / 2;
     }
 

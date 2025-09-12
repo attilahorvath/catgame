@@ -32,7 +32,7 @@ export default class {
 
     const s = Math.floor(Math.min((game.renderer.w - 20) / w - (spacing * (w - 1) / w), (game.renderer.h - 110) / h - (spacing * (h - 1) / h)));
 
-    this.#grid = new Grid(game, 'center', 100, w, h, s, spacing, spacing, (cell) => this.#click(cell));
+    this.#grid = new Grid(game, CENTER, 100, w, h, s, spacing, spacing, (cell) => this.#click(cell));
 
     this.#spriteBatch = new SpriteBatch(game, true);
 
@@ -75,7 +75,7 @@ export default class {
       if (this.#opened) {
         if (cell.secret === this.#opened.secret) {
           this.#game.shake(200);
-          
+
           cell.found = true;
           cell.activate(false);
 
