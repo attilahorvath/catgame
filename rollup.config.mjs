@@ -67,11 +67,30 @@ export default {
 
       'center': 'c',
 
-      'blackcat': 'bc',
-      'orangecat': 'oc',
-      'whitecat': 'wc',
-      'tabbycat': 'tc',
-      'silvercat': 'sc',
+      PRIMARY_COLOR: '0',
+      BACKGROUND_COLOR: '1',
+      HIGHLIGHT_COLOR: '2',
+      ACTIVE_COLOR: '3',
+      INACTIVE_COLOR: '4',
+
+      BLACKCAT_COLOR: '5',
+      ORANGECAT_COLOR: '6',
+      WHITECAT_COLOR: '7',
+      TABBYCAT_COLOR: '8',
+      SILVERCAT_COLOR: '9',
+
+      INACTIVE1_COLOR: '10',
+      INACTIVE2_COLOR: '11',
+      INACTIVE3_COLOR: '12',
+      INACTIVE4_COLOR: '13',
+      INACTIVE5_COLOR: '14',
+      INACTIVE6_COLOR: '15',
+      INACTIVE7_COLOR: '16',
+      INACTIVE8_COLOR: '17',
+      INACTIVE9_COLOR: '18',
+      INACTIVE10_COLOR: '19',
+
+      VOID_COLOR: '20',
     }),
     glsl({
       include: 'shaders/**/*.{vert,frag}'

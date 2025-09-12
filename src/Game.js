@@ -26,7 +26,7 @@ export default class {
           const type = Math.floor(Math.random() * 15);
           let color = null;
           if (type < 5) {
-            color = ['blackcat', 'orangecat', 'whitecat', 'tabbycat', 'silvercat'][Math.floor(Math.random() * 5)];
+            color = BLACKCAT_COLOR + Math.floor(Math.random() * 5);
           }
           const sprite = this.#backgroundBatch.add(Math.random() * this.renderer.w, Math.random() * this.renderer.h, 16 + Math.random() * 100, type, color);
           sprite.a = 0.33;
@@ -49,7 +49,7 @@ export default class {
 
     this.text = new Text(this);
     this.#spriteBatch = new SpriteBatch(this);
-    this.#cursor = this.#spriteBatch.add(0, 0, 26, 0, 'blackcat');
+    this.#cursor = this.#spriteBatch.add(0, 0, 26, 0, BLACKCAT_COLOR);
     this.#cursor.hidden = true;
 
     this.minigamesWon = new Set();
@@ -108,7 +108,7 @@ export default class {
     for (const sprite of this.#backgroundBatch.sprites) {
       sprite.x += sprite.dx;
       sprite.y += sprite.dy;
-      sprite.size += sprite.ds;
+      sprite.s += sprite.ds;
 
       if (sprite.x < 0) {
         sprite.dx = -sprite.dx;
@@ -130,14 +130,14 @@ export default class {
         sprite.y = this.renderer.h;
       }
 
-      if (sprite.size < 16) {
+      if (sprite.s < 16) {
         sprite.ds = -sprite.ds;
-        sprite.size = 16;
+        sprite.s = 16;
       }
 
-      if (sprite.size > 116) {
+      if (sprite.s > 116) {
         sprite.ds = -sprite.ds;
-        sprite.size = 116;
+        sprite.s = 116;
       }
     }
 

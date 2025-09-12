@@ -1,8 +1,8 @@
 export default class {
-  constructor(x, y, size, type, color) {
+  constructor(x, y, s, type, color) {
     this.x = x;
     this.y = y;
-    this.size = size;
+    this.s = s;
     this.type = type;
     this.angle = 0.0;
     this.enabled = true;
@@ -13,7 +13,7 @@ export default class {
   }
 
   attributes() {
-    return [this.x, this.y, this.size, this.type, this.r, this.g, this.b, this.hidden ? 0 : this.a, this.angle];
+    return [this.x, this.y, this.s, this.type, this.r, this.g, this.b, this.hidden ? 0 : this.a, this.angle];
   }
 
   setBaseColor(color) {
@@ -21,128 +21,32 @@ export default class {
     this.setColor(color);
   }
 
-  setColor(color) {
-    switch (color) {
-    case 'primary':
-      this.r = 0.85;
-      this.g = 0.86;
-      this.b = 1.0;
-      break;
-    case 'background':
-      this.r = 0.68;
-      this.g = 0.68;
-      this.b = 0.94;
-    case 'highlight':
-      this.r = 0.76;
-      this.g = 0.55;
-      this.b = 0.58;
-      break;
-    case 'active':
-      this.r = 0.65;
-      this.g = 0.4;
-      this.b = 0.44;
-      break;
-    case 'inactive':
-      this.r = 0.34;
-      this.g = 0.34;
-      this.b = 0.46;
-      break;
-
-    case 'blackcat':
-      this.r = 0.33;
-      this.g = 0.33;
-      this.b = 0.33;
-      break;
-    case 'orangecat':
-      this.r = 0.7;
-      this.g = 0.45;
-      this.b = 0.08;
-      break;
-    case 'whitecat':
-      this.r = 0.9;
-      this.g = 0.9;
-      this.b = 0.9;
-      break;
-    case 'tabbycat':
-      this.r = 0.64;
-      this.g = 0.56;
-      this.b = 0.38;
-      break;
-    case 'silvercat':
-      this.r = 0.6;
-      this.g = 0.6;
-      this.b = 0.6;
-      break;
-
-    case 'black':
-      this.r = 0.0;
-      this.g = 0.0;
-      this.b = 0.0;
-      break;
-
-    case 'primary1':
-      this.#fromRGB(144, 168, 195);
-      break;
-
-    case 'inactive1':
-      this.#fromRGB(144, 168, 195);
-      break;
-    case 'inactive2':
-      this.#fromRGB(70, 157, 137);
-      break;
-    case 'inactive3':
-      this.#fromRGB(181, 201, 154);
-      break;
-    case 'inactive4':
-      this.#fromRGB(0, 166, 251);
-      break;
-    case 'inactive5':
-      this.#fromRGB(76, 201, 240);
-      break;
-    case 'inactive6':
-      this.#fromRGB(244, 202, 224);
-      break;
-    case 'inactive7':
-      this.#fromRGB(229, 0, 164);
-      break;
-    case 'inactive8':
-      this.#fromRGB(242, 0, 137);
-      break;
-    case 'inactive9':
-      this.#fromRGB(255, 255, 255);
-      break;
-    case 'inactive10':
-      this.r = 1.0;
-      this.g = 0.8;
-      this.b = 0.94;
-      break;
-
-    default:
-      this.r = 1.0;
-      this.g = 1.0;
-      this.b = 1.0;
-      break;
+  setColor(index) {
+    let color = [0xd9dcff, 0xadadf0, 0xc28c94, 0xa66670, 0x575775,
+                 0x545454, 0xb36e14, 0xe6e6e6, 0xa38f61, 0x999999,
+                 0x90a8c3, 0x469d89, 0xb5c99a, 0x00a6fb, 0x4cc9f0,
+                 0xf4cae0, 0xe500a4, 0xf20089, 0xffffff, 0xffccf0,
+                 0x000000][index];
+    if (color == null) {
+      color = 0xffffff;
     }
+    this.r = ((color & 0xff0000) >> 16) / 255.0;
+    this.g = ((color & 0x00ff00) >> 8) / 255.0;
+    this.b = (color & 0x0000ff) / 255.0;
   }
 
   activate(active) {
     this.inactive = !active;
-    this.setColor(active ? (this.baseColor || 'primary') : 'inactive');
+    this.setColor(active ? (this.baseColor || PRIMARY_COLOR) : INACTIVE_COLOR);
   }
 
-  write(text, content, size, color = 'active', animations = null, delay = null) {
+  write(text, content, s, color = ACTIVE_COLOR, animations = null, delay = null) {
     (this.content || {}).enabled = false;
-    this.content = text.write(content.toString(), this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, color, animations, delay);
+    this.content = text.write(content.toString(), this.x + (this.s - s) / 2, this.y + (this.s - s) / 2, s, color, animations, delay);
   }
 
-  draw(spriteBatch, size, type, color) {
+  draw(spriteBatch, s, type, color) {
     (this.content || {}).enabled = false;
-    this.content = spriteBatch.add(this.x + (this.size - size) / 2, this.y + (this.size - size) / 2, size, type, color);
-  }
-
-  #fromRGB(r, g, b) {
-    this.r = r / 255.0;
-    this.g = g / 255.0;
-    this.b = b / 255.0;
+    this.content = spriteBatch.add(this.x + (this.s - s) / 2, this.y + (this.s - s) / 2, s, type, color);
   }
 }

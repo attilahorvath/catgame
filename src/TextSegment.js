@@ -1,9 +1,9 @@
 export default class {
-  constructor(text, x, y, size, color, animations, delay) {
+  constructor(text, x, y, s, color, animations, delay) {
     this.text = text;
     this.x = x;
     this.y = y;
-    this.size = size;
+    this.s = s;
     this.color = color;
     this.animations = animations ?? [];
     this.delay = delay ?? 0;

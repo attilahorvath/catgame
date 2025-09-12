@@ -10,13 +10,15 @@ export default class {
   #timer;
   #over;
 
-  static title = 'PAW PAW TOE';
-  static color = 'orangecat';
-  static sx = 73;
-  static type = 2;
-  static catName = 'ORANGE CAT, THE USELESS BOYFRIEND';
-  static catText = "BET YOU CAN'T BEAT ME\nIN PAW PAW TOE!\n\n\nI'M THE SMARTEST\nORANGE CAT EVER!!!";
-  static response = "WELL, THAT'S\nNOT SAYING MUCH...\n\n\nLET'S SEE!"
+  static meta = [
+    'PAW PAW TOE',
+    ORANGECAT_COLOR,
+    73,
+    2,
+    'ORANGE CAT, THE USELESS BOYFRIEND',
+    "BET YOU CAN'T BEAT ME\nIN PAW PAW TOE!\n\n\nI'M THE SMARTEST\nORANGE CAT EVER!!!",
+    "WELL, THAT'S\nNOT SAYING MUCH...\n\n\nLET'S SEE!"
+  ];
 
   constructor(game, onwin, onlose) {
     this.#game = game;
@@ -66,7 +68,7 @@ export default class {
 
       cell.activate(false);
 
-      cell.draw(this.#spriteBatch, 64, 0, symbol === 'X' ? 'blackcat' : 'orangecat');
+      cell.draw(this.#spriteBatch, 64, 0, symbol === 'X' ? BLACKCAT_COLOR : ORANGECAT_COLOR);
 
       this.#checkGrid();
     }

@@ -9,31 +9,33 @@ export default class {
     const vertexShader = this.#compileShader(gl, gl.VERTEX_SHADER, vertexShaderSource)
     const fragmentShader = this.#compileShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 
-    this.#program = gl.createProgram();
+    const program = gl.createProgram();
 
     const attachShader = gl.attachShader.bind(gl);
     const bindAttribLocation = gl.bindAttribLocation.bind(gl);
     const getUniformLocation = gl.getUniformLocation.bind(gl);
 
-    attachShader(this.#program, vertexShader);
-    attachShader(this.#program, fragmentShader);
+    attachShader(program, vertexShader);
+    attachShader(program, fragmentShader);
 
-    bindAttribLocation(this.#program, POSITION_ATTRIBUTE_LOCATION, 'vertexPosition');
-    bindAttribLocation(this.#program, COLOR_ATTRIBUTE_LOCATION, 'vertexColor');
-    bindAttribLocation(this.#program, TEX_COORD_ATTRIBUTE_LOCATION, 'vertexTexCoord');
+    bindAttribLocation(program, POSITION_ATTRIBUTE_LOCATION, 'vertexPosition');
+    bindAttribLocation(program, COLOR_ATTRIBUTE_LOCATION, 'vertexColor');
+    bindAttribLocation(program, TEX_COORD_ATTRIBUTE_LOCATION, 'vertexTexCoord');
 
-    bindAttribLocation(this.#program, SPRITE_POSITION_ATTRIBUTE_LOCATION, 'spritePosition');
-    bindAttribLocation(this.#program, SPRITE_SIZE_ATTRIBUTE_LOCATION, 'spriteSize');
-    bindAttribLocation(this.#program, SPRITE_TYPE_ATTRIBUTE_LOCATION, 'spriteType');
-    bindAttribLocation(this.#program, SPRITE_COLOR_ATTRIBUTE_LOCATION, 'spriteColor');
-    bindAttribLocation(this.#program, SPRITE_ANGLE_ATTRIBUTE_LOCATION, 'spriteAngle');
+    bindAttribLocation(program, SPRITE_POSITION_ATTRIBUTE_LOCATION, 'spritePosition');
+    bindAttribLocation(program, SPRITE_SIZE_ATTRIBUTE_LOCATION, 'spriteSize');
+    bindAttribLocation(program, SPRITE_TYPE_ATTRIBUTE_LOCATION, 'spriteType');
+    bindAttribLocation(program, SPRITE_COLOR_ATTRIBUTE_LOCATION, 'spriteColor');
+    bindAttribLocation(program, SPRITE_ANGLE_ATTRIBUTE_LOCATION, 'spriteAngle');
 
-    gl.linkProgram(this.#program);
+    gl.linkProgram(program);
 
-    this.#viewUniformLocation = getUniformLocation(this.#program, 'view');
-    this.#projectionUniformLocation = getUniformLocation(this.#program, 'projection');
-    this.#texUniformLocation = getUniformLocation(this.#program, 'tex');
-    this.#imageSizeUniformLocation = getUniformLocation(this.#program, 'imageSize');
+    this.#viewUniformLocation = getUniformLocation(program, 'view');
+    this.#projectionUniformLocation = getUniformLocation(program, 'projection');
+    this.#texUniformLocation = getUniformLocation(program, 'tex');
+    this.#imageSizeUniformLocation = getUniformLocation(program, 'imageSize');
+
+    this.#program = program;
   }
 
   use(gl, view, projection) {

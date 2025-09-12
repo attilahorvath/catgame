@@ -15,13 +15,15 @@ export default class {
   #flagButton;
   #mode;
 
-  static title = 'MEOWSTERPIECE';
-  static color = 'whitecat';
-  static sx = 8;
-  static type = 3;
-  static catName = 'CHA CHA';
-  static catText = 'TODAY I DECIDED TO BE\nAN ARTIST!!\nHELP ME WITH THIS\nPAINT BY NUMBER!\n\n\nTHE CLUES WILL TELL YOU\nHOW MANY BLOCKS SHOULD\nBE PAINTED IN EACH ROW\nAND IN EACH COLUMN!';
-  static response = 'SURE SURE, ARTIST TODAY,\nSOMETHING ELSE TOMORROW!\n\n\nTYPICAL KITTY...';
+  static meta = [
+    'MEOWSTERPIECE',
+    WHITECAT_COLOR,
+    8,
+    3,
+    'CHA CHA',
+    'TODAY I DECIDED TO BE\nAN ARTIST!!\nHELP ME WITH THIS\nPAINT BY NUMBER!\n\n\nTHE CLUES WILL TELL YOU\nHOW MANY BLOCKS SHOULD\nBE PAINTED IN EACH ROW\nAND IN EACH COLUMN!',
+    'SURE SURE, ARTIST TODAY,\nSOMETHING ELSE TOMORROW!\n\n\nTYPICAL KITTY...'
+  ];
 
   constructor(game, onwin) {
     this.#game = game;
@@ -48,7 +50,7 @@ export default class {
         if (x < this.#maxRows || y < this.#maxColumns - this.#columns[x - this.#maxRows].length) {
           cell.hidden = true;
         } else {
-          cell.write(game.text, this.#columns[x - this.#maxRows][y - (this.#maxColumns - this.#columns[x - this.#maxRows].length)], s * 2 / 3, 'highlight');
+          cell.write(game.text, this.#columns[x - this.#maxRows][y - (this.#maxColumns - this.#columns[x - this.#maxRows].length)], s * 2 / 3, HIGHLIGHT_COLOR);
           cell.activate(false);
         }
       }
@@ -60,7 +62,7 @@ export default class {
         if (y < this.#maxColumns || x < this.#maxRows - this.#rows[y - this.#maxColumns].length) {
           cell.hidden = true;
         } else {
-          cell.write(game.text, this.#rows[y - this.#maxColumns][x - (this.#maxRows - this.#rows[y - this.#maxColumns].length)], this.#grid.s * 2 / 3, 'highlight');
+          cell.write(game.text, this.#rows[y - this.#maxColumns][x - (this.#maxRows - this.#rows[y - this.#maxColumns].length)], this.#grid.s * 2 / 3, HIGHLIGHT_COLOR);
           cell.activate(false);
         }
       }
@@ -69,10 +71,10 @@ export default class {
     this.#buttons = new Grid(game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
     this.#markButton = this.#buttons.sprites[0];
-    this.#markButton.write(game.text, 'O', 30, 'active');
+    this.#markButton.write(game.text, 'O', 30, ACTIVE_COLOR);
 
     this.#flagButton = this.#buttons.sprites[1];
-    this.#flagButton.write(game.text, 'X', 30, 'active');
+    this.#flagButton.write(game.text, 'X', 30, ACTIVE_COLOR);
 
     this.#setMode('mark');
 
@@ -104,18 +106,18 @@ export default class {
     case 'mark':
       if (cell.state !== 'marked') {
         cell.state = 'marked';
-        cell.setBaseColor('active');
+        cell.setBaseColor(ACTIVE_COLOR);
       } else {
         cell.state = null;
-        cell.setBaseColor('primary');
+        cell.setBaseColor(PRIMARY_COLOR);
       }
       break;
 
     case 'flag':
-      cell.setBaseColor('primary');
+      cell.setBaseColor(PRIMARY_COLOR);
       if (cell.state !== 'flagged') {
         cell.state = 'flagged';
-        cell.write(this.#game.text, 'X', this.#grid.s * 2 / 3, 'highlight');
+        cell.write(this.#game.text, 'X', this.#grid.s * 2 / 3, HIGHLIGHT_COLOR);
       } else {
         cell.state = null;
       }
@@ -149,7 +151,7 @@ export default class {
 
     for (let x = this.#maxRows; x < this.#w; x++) {
       for (let y = 0; y < this.#maxColumns; y++) {
-        this.#grid.cellAt(x, y).setBaseColor('inactive');
+        this.#grid.cellAt(x, y).setBaseColor(INACTIVE_COLOR);
       }
 
       let current = 0;
@@ -164,9 +166,9 @@ export default class {
         if (this.#grid.cellAt(x, y).state !== 'marked' || y === this.#h - 1) {
           if ((current > 0 || y === this.#h - 1) && index < this.#columns[x - this.#maxRows].length) {
             if (current > this.#columns[x - this.#maxRows][index]) {
-              this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor('highlight');
+              this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor(HIGHLIGHT_COLOR);
             } else if (current === this.#columns[x - this.#maxRows][index]) {
-              this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor('primary1');
+              this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor(INACTIVE1_COLOR);
               correct += 1;
             }
 
@@ -184,7 +186,7 @@ export default class {
 
     for (let y = this.#maxColumns; y < this.#h; y++) {
       for (let x = 0; x < this.#maxRows; x++) {
-        this.#grid.cellAt(x, y).setBaseColor('inactive');
+        this.#grid.cellAt(x, y).setBaseColor(INACTIVE_COLOR);
       }
 
       let current = 0;
@@ -199,9 +201,9 @@ export default class {
         if (this.#grid.cellAt(x, y).state !== 'marked' || x === this.#w - 1) {
           if ((current > 0 || x === this.#w - 1) && index < this.#rows[y - this.#maxColumns].length) {
             if (current > this.#rows[y - this.#maxColumns][index]) {
-              this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor('highlight');
+              this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor(HIGHLIGHT_COLOR);
             } else if (current === this.#rows[y - this.#maxColumns][index]) {
-              this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor('primary1');
+              this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor(INACTIVE1_COLOR);
               correct += 1;
             }
 

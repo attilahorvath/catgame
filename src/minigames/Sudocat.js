@@ -10,13 +10,15 @@ export default class {
   #buttons;
   #digit;
 
-  static title = 'SUDOCAT';
-  static color = 'blackcat';
-  static sx = 73;
-  static type = 4;
-  static catName = 'KUMBA';
-  static catText = "I NEED ALL MY TREATS AND\nTOYS NEATLY ORGANISED!!\n\n\nTHERE SHOULD BE ONLY ONE\nTYPE IN EACH ROW, EACH\nCOLUMN AND IN EACH BOX!!";
-  static response = 'KITTY MUST HAVE OCD...';
+  static meta = [
+    'SUDOCAT',
+    BLACKCAT_COLOR,
+    73,
+    4,
+    'KUMBA',
+    "I NEED ALL MY TREATS AND\nTOYS NEATLY ORGANISED!!\n\n\nTHERE SHOULD BE ONLY ONE\nTYPE IN EACH ROW, EACH\nCOLUMN AND IN EACH BOX!!",
+    'KITTY MUST HAVE OCD...'
+  ];
 
   constructor(game, onwin) {
     this.#game = game;
@@ -169,7 +171,7 @@ export default class {
       for (let x = 0; x < 9; x++) {
         const cell = this.#cellAt(x, y);
         if (!cell.inactive) {
-          cell.setBaseColor('primary');
+          cell.setBaseColor(PRIMARY_COLOR);
         }
       }
     }
@@ -197,7 +199,7 @@ export default class {
         for (let y = 0; y < 9; y++) {
           const cell = this.#cellAt(x, y);
           if (!cell.inactive && cell.digit == digit) {
-            cell.setBaseColor('active');
+            cell.setBaseColor(ACTIVE_COLOR);
             this.#gridAt(x, y).changed();
           }
         }
@@ -225,7 +227,7 @@ export default class {
         for (let x = 0; x < 9; x++) {
           const cell = this.#cellAt(x, y);
           if (!cell.inactive && cell.digit == digit) {
-            cell.setBaseColor('active');
+            cell.setBaseColor(ACTIVE_COLOR);
             this.#gridAt(x, y).changed();
           }
         }
@@ -255,7 +257,7 @@ export default class {
         for (let i = 0; i < 9; i++) {
           const cell = grid.sprites[i];
           if (!cell.inactive && cell.digit == digit) {
-            cell.setBaseColor('active');
+            cell.setBaseColor(ACTIVE_COLOR);
             grid.changed();
           }
         }

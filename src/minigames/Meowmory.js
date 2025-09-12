@@ -11,13 +11,15 @@ export default class {
   #showingB;
   #timer;
 
-  static title = 'MEOWMORY';
-  static color = 'silvercat';
-  static sx = 8;
-  static type = 3;
-  static catName = 'MOLLY';
-  static catText = "THEY SAY I HAVE THE\nMEMORY OF A GOLDFISH...\n\n\nCAN YOU SHOW ME HOW\nTO REMEMBER THINGS??";
-  static response = 'SOMEONE SAID FISHIE?!\n\n\nYUM!!!';
+  static meta = [
+    'MEOWMORY',
+    SILVERCAT_COLOR,
+    8,
+    3,
+    'MOLLY',
+    "THEY SAY I HAVE THE\nMEMORY OF A GOLDFISH...\n\n\nCAN YOU SHOW ME HOW\nTO REMEMBER THINGS??",
+    'SOMEONE SAID FISHIE?!\n\n\nYUM!!!'
+  ];
 
   constructor(game, onwin) {
     this.#game = game;
@@ -67,8 +69,8 @@ export default class {
       }
 
       cell.open = true;
-      cell.draw(this.#spriteBatch, this.#grid.s * 2 / 3, cell.secret, cell.secret < 5 ? 'tabbycat' : null);
-      cell.setBaseColor('active');
+      cell.draw(this.#spriteBatch, this.#grid.s * 2 / 3, cell.secret, cell.secret < 5 ? TABBYCAT_COLOR : null);
+      cell.setBaseColor(ACTIVE_COLOR);
 
       if (this.#opened) {
         if (cell.secret === this.#opened.secret) {
@@ -100,11 +102,11 @@ export default class {
 
     this.#showingA.open = false;
     this.#showingA.content.enabled = false;
-    this.#showingA.setBaseColor('primary');
+    this.#showingA.setBaseColor(PRIMARY_COLOR);
 
     this.#showingB.open = false;
     this.#showingB.content.enabled = false;
-    this.#showingB.setBaseColor('primary');
+    this.#showingB.setBaseColor(PRIMARY_COLOR);
 
     this.#grid.changed();
     this.#game.text.changed();

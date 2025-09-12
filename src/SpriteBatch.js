@@ -13,40 +13,41 @@ export default class {
 
   constructor(game, smooth = false, textureName = 'sprites') {
     this.#game = game;
+    const renderer = game.renderer;
 
-    this.#shader = this.#game.renderer.createShader('sprite', vertexShaderSource, fragmentShaderSource);
+    this.#shader = renderer.createShader('sprite', vertexShaderSource, fragmentShaderSource);
 
-    this.#vao = this.#game.renderer.createVao();
+    this.#vao = renderer.createVao();
 
-    this.#game.renderer.useBuffer(this.#game.renderer.quadBuffer);
+    renderer.useBuffer(renderer.quadBuffer);
 
-    this.#game.renderer.setAttribute(POSITION_ATTRIBUTE_LOCATION, 2, 16, 0);
-    this.#game.renderer.setAttribute(TEX_COORD_ATTRIBUTE_LOCATION, 2, 16, 8);
+    renderer.setAttribute(POSITION_ATTRIBUTE_LOCATION, 2, 16, 0);
+    renderer.setAttribute(TEX_COORD_ATTRIBUTE_LOCATION, 2, 16, 8);
 
-    this.#instanceBuffer = this.#game.renderer.createBuffer(new Float32Array(), true);
+    this.#instanceBuffer = renderer.createBuffer(new Float32Array(), true);
 
-    this.#game.renderer.setAttribute(SPRITE_POSITION_ATTRIBUTE_LOCATION, 2, 36, 0, 1);
-    this.#game.renderer.setAttribute(SPRITE_SIZE_ATTRIBUTE_LOCATION, 1, 36, 8, 1);
-    this.#game.renderer.setAttribute(SPRITE_TYPE_ATTRIBUTE_LOCATION, 1, 36, 12, 1);
-    this.#game.renderer.setAttribute(SPRITE_COLOR_ATTRIBUTE_LOCATION, 4, 36, 16, 1);
-    this.#game.renderer.setAttribute(SPRITE_ANGLE_ATTRIBUTE_LOCATION, 1, 36, 32, 1);
+    renderer.setAttribute(SPRITE_POSITION_ATTRIBUTE_LOCATION, 2, 36, 0, 1);
+    renderer.setAttribute(SPRITE_SIZE_ATTRIBUTE_LOCATION, 1, 36, 8, 1);
+    renderer.setAttribute(SPRITE_TYPE_ATTRIBUTE_LOCATION, 1, 36, 12, 1);
+    renderer.setAttribute(SPRITE_COLOR_ATTRIBUTE_LOCATION, 4, 36, 16, 1);
+    renderer.setAttribute(SPRITE_ANGLE_ATTRIBUTE_LOCATION, 1, 36, 32, 1);
 
-    this.#texture = this.#game.renderer.loadTexture(textureName, smooth);
+    this.#texture = renderer.loadTexture(textureName, smooth);
 
     this.sprites = [];
     this.changed();
   }
 
-  add(x, y, size, type, color) {
+  add(x, y, s, type, color) {
     if (x === 'center') {
-      x = this.#game.renderer.w / 2 - size / 2;
+      x = this.#game.renderer.w / 2 - s / 2;
     }
 
     if (y === 'center') {
-      y = this.#game.renderer.h / 2 - size / 2;
+      y = this.#game.renderer.h / 2 - s / 2;
     }
 
-    const sprite = new Sprite(x, y, size, type, color);
+    const sprite = new Sprite(x, y, s, type, color);
 
     this.sprites.push(sprite);
     this.changed();

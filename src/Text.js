@@ -12,16 +12,16 @@ export default class extends SpriteBatch {
     this.#segments = [];
   }
 
-  write(text, x, y, size, color = 'active', animations = null, delay = null) {
+  write(text, x, y, s, color = ACTIVE_COLOR, animations = null, delay = null) {
     if (x === 'center') {
-      x = Math.floor(this.#game.renderer.w / 2 - (Math.max(...text.split('\n').map(s => s.length)) * size) / 2);
+      x = Math.floor(this.#game.renderer.w / 2 - (Math.max(...text.split('\n').map(s => s.length)) * s) / 2);
     }
 
     if (y === 'center') {
-      y = Math.floor(this.#game.renderer.h / 2 - (text.split('\n').length * size) / 2);
+      y = Math.floor(this.#game.renderer.h / 2 - (text.split('\n').length * s) / 2);
     }
 
-    const segment = new TextSegment(text, x, y, size, color, animations, delay);
+    const segment = new TextSegment(text, x, y, s, color, animations, delay);
 
     let currX = x;
     let currY = y;
@@ -30,7 +30,7 @@ export default class extends SpriteBatch {
       let type;
 
       if (c === '\n') {
-        currY += size;
+        currY += s;
         currX = x;
 
         continue;
@@ -53,13 +53,13 @@ export default class extends SpriteBatch {
       }
 
       if (type != null) {
-        const sprite = this.add(currX, currY, size, type, color);
+        const sprite = this.add(currX, currY, s, type, color);
         sprite.baseX = currX;
         sprite.baseY = currY;
         segment.sprites.push(sprite);
       }
 
-      currX += size;
+      currX += s;
     }
 
     this.#segments.push(segment);

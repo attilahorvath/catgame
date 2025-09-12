@@ -15,13 +15,15 @@ export default class {
   #mode;
   #started;
 
-  static title = 'MEOWSWEEPER';
-  static color = 'tabbycat';
-  static sx = 73;
-  static type = 2;
-  static catName = 'QUEEN KARA';
-  static catText = "YOU, NEW CAT!!\nI NEED YOU TO SCRATCH MY BACK\nIMMEDIATELY BUT ONLY WHERE\nI LIKE IT!\n\n\nSINCE YOU'RE NEW I WILL TELL\nYOU HOW MANY DANGER ZONES\nARE AROUND WHERE YOU'RE\nSCRATCHING!";
-  static response = 'OOOH, THE QUEEN HERSELF!!\n\n\nI NEED TO MAKE A GOOD\nFIRST IMPRESSION!';
+  static meta = [
+    'MEOWSWEEPER',
+    TABBYCAT_COLOR,
+    73,
+    2,
+    'QUEEN KARA THE 3RD',
+    "YOU, NEW CAT!!\nI NEED YOU TO SCRATCH MY BACK\nIMMEDIATELY BUT ONLY WHERE\nI LIKE IT!\n\n\nSINCE YOU'RE NEW I WILL TELL\nYOU HOW MANY DANGER ZONES\nARE AROUND WHERE YOU'RE\nSCRATCHING!",
+    'OOOH, THE QUEEN HERSELF!!\n\n\nI NEED TO MAKE A GOOD\nFIRST IMPRESSION!'
+  ];
 
   constructor(game, onwin, onlose) {
     this.#game = game;
@@ -43,10 +45,10 @@ export default class {
     this.#buttons = new Grid(game, 10, 10, 2, 1, 64, 10, 0, (button) => this.#buttonClick(button));
 
     this.#digButton = this.#buttons.sprites[0];
-    this.#digButton.write(game.text, 'O', 30, 'active');
+    this.#digButton.write(game.text, 'O', 30, ACTIVE_COLOR);
 
     this.#flagButton = this.#buttons.sprites[1];
-    this.#flagButton.write(game.text, 'X', 30, 'active');
+    this.#flagButton.write(game.text, 'X', 30, ACTIVE_COLOR);
 
     this.#setMode('dig');
   }
@@ -100,7 +102,7 @@ export default class {
         this.#game.text.changed();
       } else {
         cell.flagged = true;
-        cell.write(this.#game.text, 'X', this.#fontSize, 'highlight');
+        cell.write(this.#game.text, 'X', this.#fontSize, HIGHLIGHT_COLOR);
       }
       break;
     }
@@ -161,10 +163,10 @@ export default class {
         if (cell.mine) {
           for (const mineCell of this.#grid.sprites.filter(cell => cell.mine)) {
             mineCell.activate(false);
-            mineCell.write(this.#game.text, 'X', this.#fontSize, 'inactive10');
+            mineCell.write(this.#game.text, 'X', this.#fontSize, INACTIVE10_COLOR);
           }
         } else {
-          cell.write(this.#game.text, cell.mines, this.#fontSize, `inactive${cell.mines}`);
+          cell.write(this.#game.text, cell.mines, this.#fontSize, INACTIVE1_COLOR + (cell.mines - 1));
         }
       }
     }

@@ -9,7 +9,7 @@ export default class extends SpriteBatch {
   #active;
   #pressed;
 
-  constructor(game, x, y, w, h, s, spacingX, spacingY, onclick, color = 'primary', type = 0) {
+  constructor(game, x, y, w, h, s, spacingX, spacingY, onclick, color = PRIMARY_COLOR, type = 0) {
     super(game, false, 'cells');
 
     this.#game = game;
@@ -57,7 +57,7 @@ export default class extends SpriteBatch {
                 this.#active?.setColor(this.#active?.baseColor || this.#color);
               }
 
-              newActive?.setColor('highlight');
+              newActive?.setColor(HIGHLIGHT_COLOR);
               this.changed();
             }
           }
@@ -71,7 +71,7 @@ export default class extends SpriteBatch {
 
         if (this.#onclick) {
           if (this.#game.input.mouse) {
-            this.#pressed?.setColor('active');
+            this.#pressed?.setColor(ACTIVE_COLOR);
             this.changed();
           }
         }

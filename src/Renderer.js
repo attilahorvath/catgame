@@ -176,18 +176,27 @@ export default class {
   }
 
   #prepareTexture(texture, imageIndex, smooth) {
-    this.#gl.activeTexture(this.#gl.TEXTURE0);
-    this.#gl.bindTexture(this.#gl.TEXTURE_2D, texture);
+    const gl = this.#gl;
+    const texture0 = gl.TEXTURE0;
+    const texture2d = gl.TEXTURE_2D;
+    const texImage2D = gl.texImage2D.bind(gl);
+    const texParameteri = gl.texParameteri.bind(gl);
+    const rgba = gl.RGBA;
+    const unsignedByte = gl.UNSIGNED_BYTE;
+    const filter = smooth ? gl.LINEAR : gl.NEAREST;
+
+    gl.activeTexture(texture0);
+    gl.bindTexture(texture2d, texture);
 
     if (imageIndex != null) {
-      this.#gl.texImage2D(this.#gl.TEXTURE_2D, 0, this.#gl.RGBA, this.#gl.RGBA, this.#gl.UNSIGNED_BYTE, this.#images[imageIndex]);
+      texImage2D(texture2d, 0, rgba, rgba, unsignedByte, this.#images[imageIndex]);
     } else {
-      this.#gl.texImage2D(this.#gl.TEXTURE_2D, 0, this.#gl.RGBA, 1, 1, 0, this.#gl.RGBA, this.#gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 255, 255,]));
+      texImage2D(texture2d, 0, rgba, 1, 1, 0, rgba, unsignedByte, new Uint8Array([255, 0, 255, 255,]));
     }
 
-    this.#gl.texParameteri(this.#gl.TEXTURE_2D, this.#gl.TEXTURE_WRAP_S, this.#gl.CLAMP_TO_EDGE);
-    this.#gl.texParameteri(this.#gl.TEXTURE_2D, this.#gl.TEXTURE_WRAP_T, this.#gl.CLAMP_TO_EDGE);
-    this.#gl.texParameteri(this.#gl.TEXTURE_2D, this.#gl.TEXTURE_MIN_FILTER, smooth ? this.#gl.LINEAR : this.#gl.NEAREST);
-    this.#gl.texParameteri(this.#gl.TEXTURE_2D, this.#gl.TEXTURE_MAG_FILTER, smooth ? this.#gl.LINEAR : this.#gl.NEAREST);
+    texParameteri(texture2d, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    texParameteri(texture2d, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    texParameteri(texture2d, gl.TEXTURE_MIN_FILTER, filter);
+    texParameteri(texture2d, gl.TEXTURE_MAG_FILTER, filter);
   }
 }

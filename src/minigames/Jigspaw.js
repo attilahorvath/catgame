@@ -15,20 +15,22 @@ export default class {
 
     const s = Math.floor(Math.min((game.renderer.w - 20) / w, (game.renderer.h - 110) / h));
 
-    this.#grid = new Grid(game, 'center', 100, w, h, s, 0, 0, (cell) => this.#click(cell));
+    const grid = new Grid(game, 'center', 100, w, h, s, 0, 0, (cell) => this.#click(cell));
 
     for (let i = 0; i < w * h; i++) {
-      const cell = this.#grid.sprites[i];
+      const cell = grid.sprites[i];
       cell.index = i;
-      cell.write(game.text, i, 12, 'highlight');
+      cell.write(game.text, i, 12, HIGHLIGHT_COLOR);
     }
 
     for (let i = 0; i < (w * h) / 2; i++) {
-      const cellA = this.#grid.sprites[Math.floor(Math.random() * this.#grid.sprites.length)];
-      const cellB = this.#grid.sprites[Math.floor(Math.random() * this.#grid.sprites.length)];
+      const cellA = grid.sprites[Math.floor(Math.random() * grid.sprites.length)];
+      const cellB = grid.sprites[Math.floor(Math.random() * grid.sprites.length)];
 
       this.#swap(cellA, cellB);
     }
+
+    this.#grid = grid;
   }
 
   update() {
@@ -56,8 +58,8 @@ export default class {
     cellA.index = cellB.index;
     cellB.index = index;
 
-    cellA.write(this.#game.text, cellA.index, 12, 'highlight');
-    cellB.write(this.#game.text, cellB.index, 12, 'highlight');
+    cellA.write(this.#game.text, cellA.index, 12, HIGHLIGHT_COLOR);
+    cellB.write(this.#game.text, cellB.index, 12, HIGHLIGHT_COLOR);
   }
 
   #checkGrid() {
