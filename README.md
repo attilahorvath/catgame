@@ -1,8 +1,8 @@
-**A VOIDING YOUR PROBLEMS**: A Friendship Quest
+# A VOIDING YOUR PROBLEMS: A Friendship Quest
 
 Poor little stray Vicki is a void kitten who has just been adopted into a busy apartment building, ruled over by the resident tabby, Queen Kara III. She will have to prove herself by helping the other cats living in the building to build trust with Kara and be accepted as one of the clowder. Will you help her making this place her new home? (Based on a true story.)
 
-**Features**
+## Features
 
 A Voiding Your Problems is a collection of 6 simple catty minigames where you need to prove your worth to the other cats.
 
@@ -18,7 +18,7 @@ The game is optimised for both mobile and desktop gameplay, you can use your tou
 
 It has been tested on recent versions of desktop Chrome, Firefox, Opera, Edge and mobile Chrome, Firefox, Opera and Samsung Internet. It requires WebGL2, support for which is fortunately ubiquitous by now.
 
-**Tools**
+## Tools
 
 - [VS Code](https://code.visualstudio.com/) for development
 - [Rollup](https://rollupjs.org/) with [Terser](https://terser.org/) for bundling and minifying the code
@@ -27,7 +27,7 @@ It has been tested on recent versions of desktop Chrome, Firefox, Opera, Edge an
 - [Gimp](https://www.gimp.org/) for the pixel art texture atlases
 - [TinyPNG](https://tinypng.com/) for picture compression
 
-**Acknowledgements**
+## Acknowledgements
 
 All code and art assets were made by myself, Attila Horvath.
 
