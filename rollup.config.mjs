@@ -44,7 +44,12 @@ export default {
       'draw': 'd',
       'write': 'w',
       'emit': 'e',
+      'shake': 'k',
       // 'clear': 'c',
+
+      'activate': 'i',
+      'cellAt': 'ca',
+      'clickRead': 'cr',
 
       'setColor': 'cc',
       'setBaseColor': 'cb',
@@ -57,6 +62,7 @@ export default {
 
       'setAttribute': 'a',
       'changed': 'c',
+      'multiplier': 'm',
 
       // 'renderer': 'r',
       // 'text': 't',
@@ -73,6 +79,10 @@ export default {
       'enabled': 'e',
       'disabled': 'i',
       'hidden': 'h',
+
+      // 'spriteBatch': 'sb',
+      // 'minigamesWon': 'mw',
+      'firstStart': 'fs',
 
       CENTER: -1,
 

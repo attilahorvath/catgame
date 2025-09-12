@@ -26,8 +26,10 @@ export default class {
     this.canvas.style.touchAction = 'none';
 
     new ResizeObserver(() => {
-      this.w = this.canvas.clientWidth;
-      this.h = this.canvas.clientHeight;
+      this.multiplier = Math.max(this.canvas.clientWidth, this.canvas.clientHeight) < 1000 ? 2 : 1;
+
+      this.w = this.canvas.clientWidth * this.multiplier;
+      this.h = this.canvas.clientHeight * this.multiplier;
 
       this.canvas.width = this.w;
       this.canvas.height = this.h;

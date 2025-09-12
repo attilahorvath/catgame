@@ -13,15 +13,15 @@ export default class {
     game.renderer.canvas.addEventListener('pointermove', event => {
       this.mouse = event.pointerType === 'mouse';
 
-      this.x = event.offsetX;
-      this.y = event.offsetY;
+      this.x = event.offsetX * game.renderer.multiplier;
+      this.y = event.offsetY * game.renderer.multiplier;
     });
 
     game.renderer.canvas.addEventListener('pointerdown', event => {
       this.mouse = event.pointerType === 'mouse';
 
-      this.x = event.offsetX;
-      this.y = event.offsetY;
+      this.x = event.offsetX * game.renderer.multiplier;
+      this.y = event.offsetY * game.renderer.multiplier;
 
       this.#newPress = true;
     });
@@ -29,8 +29,8 @@ export default class {
     game.renderer.canvas.addEventListener('pointerup', event => {
       this.mouse = event.pointerType === 'mouse';
 
-      this.x = event.offsetX;
-      this.y = event.offsetY;
+      this.x = event.offsetX * game.renderer.multiplier;
+      this.y = event.offsetY * game.renderer.multiplier;
 
       this.#newRelease = true;
     });
