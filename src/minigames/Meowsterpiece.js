@@ -220,6 +220,7 @@ export default class {
     }
 
     if (gridCorrect === (this.#w - this.#maxRows) + (this.#h - this.#maxColumns)) {
+      this.#game.shake(200);
       this.#onwin();
     }
   }

@@ -26,11 +26,10 @@ export default class {
 
     this.#instanceBuffer = renderer.createBuffer(new Float32Array(), true);
 
-    renderer.setAttribute(SPRITE_POSITION_ATTRIBUTE_LOCATION, 2, 36, 0, 1);
-    renderer.setAttribute(SPRITE_SIZE_ATTRIBUTE_LOCATION, 1, 36, 8, 1);
-    renderer.setAttribute(SPRITE_TYPE_ATTRIBUTE_LOCATION, 1, 36, 12, 1);
-    renderer.setAttribute(SPRITE_COLOR_ATTRIBUTE_LOCATION, 4, 36, 16, 1);
-    renderer.setAttribute(SPRITE_ANGLE_ATTRIBUTE_LOCATION, 1, 36, 32, 1);
+    renderer.setAttribute(SPRITE_POSITION_ATTRIBUTE_LOCATION, 2, 32, 0, 1);
+    renderer.setAttribute(SPRITE_SIZE_ATTRIBUTE_LOCATION, 1, 32, 8, 1);
+    renderer.setAttribute(SPRITE_TYPE_ATTRIBUTE_LOCATION, 1, 32, 12, 1);
+    renderer.setAttribute(SPRITE_COLOR_ATTRIBUTE_LOCATION, 4, 32, 16, 1);
 
     this.#texture = renderer.loadTexture(textureName, smooth);
 

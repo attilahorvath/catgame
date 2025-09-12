@@ -26,7 +26,6 @@ export default class {
     bindAttribLocation(program, SPRITE_SIZE_ATTRIBUTE_LOCATION, 'spriteSize');
     bindAttribLocation(program, SPRITE_TYPE_ATTRIBUTE_LOCATION, 'spriteType');
     bindAttribLocation(program, SPRITE_COLOR_ATTRIBUTE_LOCATION, 'spriteColor');
-    bindAttribLocation(program, SPRITE_ANGLE_ATTRIBUTE_LOCATION, 'spriteAngle');
 
     gl.linkProgram(program);
 

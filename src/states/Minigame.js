@@ -17,6 +17,10 @@ export default class {
   #exit;
   #catMet;
   #started;
+  #won;
+  #lost;
+  #lostText;
+  #lostTextInfo;
 
   constructor(minigameClass) {
     this.#minigameClass = minigameClass;
@@ -77,11 +81,19 @@ export default class {
       this.#started = true;
     }
 
-    if (this.#started) {
+    if (this.#started && !this.#won && !this.#lost) {
       this.#minigame.update();
     }
 
     this.#spriteBatch.update();
+
+    if (this.#won && this.#game.input.click()) {
+      this.#exit = true;
+    }
+
+    if (this.#lost && this.#game.input.click()) {
+      this.#setup();
+    }
   }
 
   draw() {
@@ -94,6 +106,14 @@ export default class {
   }
 
   #setup() {
+    this.#won = false;
+    this.#lost = false;
+
+    (this.#lostText || {}).enabled = false;
+    (this.#lostTextInfo || {}).enabled = false;
+
+    this.#game.text.clear();
+
     this.#minigame = new this.#minigameClass(this.#game, () => this.#win(), () => this.#lose());
 
     this.#exitButton = this.#buttons.sprites[0];
@@ -101,14 +121,20 @@ export default class {
   }
 
   #win() {
-    this.#game.scheduleTimer(500, () => {
-      this.#game.minigamesWon.add(this.#minigameClass);
-      this.#exit = true;
-    });
+    this.#won = true;
+    this.#game.minigamesWon.add(this.#minigameClass);
+
+    const texts = ['CONGRATS!!', 'WELL DONE!!', 'GOOD JOB!!', 'PAWSOME!!', 'AMEOWZING!!'];
+    const text = this.#game.text.write(texts[Math.floor(Math.random() * texts.length)], 'center', 'center', 48, HIGHLIGHT_COLOR, ['sine']);
+    this.#game.text.write('NOW GO HELP THE OTHER CATS!', 'center', text.y + 75, 32, ACTIVE_COLOR, ['typing', 'shake'], 1200);
   }
 
   #lose() {
-    this.#game.scheduleTimer(500, () => { this.#setup(); });
+    this.#lost = true;
+
+    const texts = ['OOPS!!', 'BETTER LUCK NEXT TIME!!', 'OH WELL!!'];
+    this.#lostText = this.#game.text.write(texts[Math.floor(Math.random() * texts.length)], 'center', 'center', 48, HIGHLIGHT_COLOR, ['sine']);
+    this.#lostTextInfo = this.#game.text.write("LET'S TRY AGAIN!", 'center', this.#lostText.y + 75, 32, ACTIVE_COLOR, ['typing', 'shake'], 1200);
   }
 
   #buttonClick(button) {

@@ -113,6 +113,8 @@ export default class {
       cell.setBaseColor(cell.grid.color);
       this.#selected = null;
     } else if (this.#selected && freeCell && this.#selected.symbol === cell.symbol) {
+      this.#game.shake(200);
+      
       this.#selected.activate(false);
       this.#selected.hidden = true;
       this.#selected.content.enabled = false;

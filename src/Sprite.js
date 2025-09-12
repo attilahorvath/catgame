@@ -4,7 +4,6 @@ export default class {
     this.y = y;
     this.s = s;
     this.type = type;
-    this.angle = 0.0;
     this.enabled = true;
     this.hidden = false;
     this.a = 1.0;
@@ -13,7 +12,7 @@ export default class {
   }
 
   attributes() {
-    return [this.x, this.y, this.s, this.type, this.r, this.g, this.b, this.hidden ? 0 : this.a, this.angle];
+    return [this.x, this.y, this.s, this.type, this.r, this.g, this.b, this.hidden ? 0 : this.a];
   }
 
   setBaseColor(color) {

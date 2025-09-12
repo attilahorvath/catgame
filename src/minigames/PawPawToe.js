@@ -136,7 +136,8 @@ export default class {
     if (symbol === 'X') {
       this.#onwin();
     } else if (symbol === 'O') {
-      this.#onlose();
+      this.#grid.disabled = true;
+      this.#game.scheduleTimer(2000, () => this.#onlose());
     }
   }
 }

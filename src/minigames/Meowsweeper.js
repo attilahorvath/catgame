@@ -83,15 +83,7 @@ export default class {
       if (cell.mine) {
         this.#grid.disabled = true;
 
-        this.#game.scheduleTimer(2000, () => {
-          for (const cell of this.#grid.sprites) {
-            (cell.content || {}).enabled = false;
-          }
-
-          this.#game.text.changed();
-
-          this.#onlose();
-        });
+        this.#game.scheduleTimer(2000, () => this.#onlose());
       }
 
       break;

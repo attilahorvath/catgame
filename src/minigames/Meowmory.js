@@ -74,6 +74,8 @@ export default class {
 
       if (this.#opened) {
         if (cell.secret === this.#opened.secret) {
+          this.#game.shake(200);
+          
           cell.found = true;
           cell.activate(false);
 

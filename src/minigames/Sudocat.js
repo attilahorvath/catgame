@@ -145,6 +145,7 @@ export default class {
     }
 
     if (this.#checkCells()) {
+      this.#game.shake(200);
       this.#onwin();
     }
 

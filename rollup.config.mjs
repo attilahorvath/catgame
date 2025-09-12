@@ -27,7 +27,6 @@ export default {
       SPRITE_SIZE_ATTRIBUTE_LOCATION: '4',
       SPRITE_TYPE_ATTRIBUTE_LOCATION: '5',
       SPRITE_COLOR_ATTRIBUTE_LOCATION: '6',
-      SPRITE_ANGLE_ATTRIBUTE_LOCATION: '7',
 
       'imageSize': 'is',
 
@@ -37,7 +36,6 @@ export default {
       'spriteSize': 'ss',
       'spriteType': 'st',
       'spriteColor': 'sc',
-      'spriteAngle': 'sa',
 
       'texCoord': 'tc',
       'fragmentColor': 'fc',
