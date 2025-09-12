@@ -83,7 +83,10 @@ export default class {
   }
 
   shake(duration) {
-    navigator.vibrate(duration);
+    if (navigator.vibrate) {
+      navigator.vibrate(duration);
+    }
+
     this.#shakeScreen = true;
     this.scheduleTimer(duration, () => this.#shakeScreen = false);
   }
