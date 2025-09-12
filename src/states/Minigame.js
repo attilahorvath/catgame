@@ -53,6 +53,7 @@ export default class {
     const [title, _color, _sx, _type, _catName, _catText, response] = this.#minigameClass.meta;
 
     if (this.#exit) {
+      (this.#timer || {}).disabled = true;
       return new Select(this.#game);
     }
 
@@ -88,7 +89,6 @@ export default class {
     this.#spriteBatch.update();
 
     if (this.#won && this.#game.input.click()) {
-      this.#timer.disabled = true;
       this.#exit = true;
     }
 
@@ -137,7 +137,7 @@ export default class {
   #lose() {
     this.#lost = true;
 
-    const texts = ['OOPS!!', 'BETTER LUCK NEXT TIME!!', 'OH WELL!!'];
+    const texts = ['OOPS!!', 'CAT ASTROPHE!!', 'OH WELL!!'];
     this.#lostText = this.#game.text.write(texts[Math.floor(Math.random() * texts.length)], CENTER, CENTER, 48, HIGHLIGHT_COLOR, [SINE_ANIMATION]);
     this.#lostTextInfo = this.#game.text.write("LET'S TRY AGAIN!", CENTER, this.#lostText.y + 75, 32, ACTIVE_COLOR, [TYPING_ANIMATION, SHAKE_ANIMATION], 1200);
   }

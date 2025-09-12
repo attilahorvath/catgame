@@ -50,16 +50,16 @@ export default class {
     this.#flagButton = this.#buttons.sprites[1];
     this.#flagButton.write(game.text, 'X', 30, ACTIVE_COLOR);
 
-    this.#setMode('dig');
+    this.#setMode(DIG);
   }
 
   update() {
-    if (this.#game.input.keyPresses['KeyA'] || this.#game.input.keyPresses['ArrowLeft']) {
-      this.#setMode('dig');
+    if (this.#game.input.left()) {
+      this.#setMode(DIG);
     }
 
-    if (this.#game.input.keyPresses['KeyD'] || this.#game.input.keyPresses['ArrowRight']) {
-      this.#setMode('flag');
+    if (this.#game.input.right()) {
+      this.#setMode(FLAG);
     }
 
     this.#grid.update();
@@ -73,7 +73,7 @@ export default class {
 
   #click(cell) {
     switch (this.#mode) {
-    case 'dig':
+    case DIG:
       if (!this.#started) {
         this.#start(cell);
       }
@@ -87,7 +87,7 @@ export default class {
       }
 
       break;
-    case 'flag':
+    case FLAG:
       if (cell.flagged) {
         cell.flagged = false;
         cell.content.enabled = false;
@@ -174,17 +174,17 @@ export default class {
 
   #buttonClick(button) {
     if (button === this.#flagButton) {
-      this.#setMode('flag');
+      this.#setMode(FLAG);
     } else if (button === this.#digButton) {
-      this.#setMode('dig');
+      this.#setMode(DIG);
     }
   }
 
   #setMode(mode) {
     this.#mode = mode;
 
-    this.#digButton.activate(this.#mode !== 'dig');
-    this.#flagButton.activate(this.#mode !== 'flag');
+    this.#digButton.activate(this.#mode !== DIG);
+    this.#flagButton.activate(this.#mode !== FLAG);
 
     this.#buttons.changed();
   }

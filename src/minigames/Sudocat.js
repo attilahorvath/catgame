@@ -8,6 +8,7 @@ export default class {
   #grids;
   #cellSize;
   #buttons;
+  #activeButtons;
   #digit;
 
   static meta = [
@@ -45,11 +46,31 @@ export default class {
       }
     }
 
-    this.#buttons = new Grid(game, CENTER, game.renderer.h - 74, 10, 1, 64, 10, 0, (button) => this.#buttonClick(button));
+    let buttonSize = 64;
+    let buttonSpacing = 10;
+
+    if (game.renderer.h - (100 + 3 * (gridSize + gridSpacing) + 20) >= 256) {
+      buttonSize = Math.floor(Math.min((game.renderer.w - 20) / 3 - (buttonSpacing * (3 - 1) / 3), (game.renderer.h - (100 + 3 * (gridSize + buttonSpacing) + 20)) / 4 - (buttonSpacing * (4 - 1) / 4)));
+
+      this.#buttons = new Grid(game, CENTER, 100 + 3 * (gridSize + gridSpacing), 3, 4, buttonSize, buttonSpacing, buttonSpacing, (button) => this.#buttonClick(button));
+      this.#buttons.cellAt(0, 3).activate(false);
+      this.#buttons.cellAt(0, 3).hidden = true;
+
+      this.#buttons.cellAt(2, 3).activate(false);
+      this.#buttons.cellAt(2, 3).hidden = true;
+    } else {
+      this.#buttons = new Grid(game, CENTER, 100 + 3 * (gridSize + gridSpacing), 10, 1, buttonSize, buttonSpacing, 0, (button) => this.#buttonClick(button));
+    }
+
+    this.#activeButtons = this.#buttons.sprites.filter(button => !button.inactive);
 
     for (let digit = 1; digit <= 10; digit++) {
-      const button = this.#buttons.sprites[digit - 1];
-      button.draw(this.#spriteBatch, 64 * 2 / 3, digit + 5);
+      const button = this.#activeButtons[digit - 1];
+      if (digit === 10) {
+        button.write(game.text, 'X', buttonSize * 2 / 3, ACTIVE_COLOR);
+      } else {
+        button.draw(this.#spriteBatch, buttonSize * 2 / 3, digit + 5);
+      }
       button.digit = digit <= 9 ? digit : null;
     }
 
@@ -64,19 +85,19 @@ export default class {
       }
     }
 
-    if (this.#game.input.keyPresses['KeyA'] || this.#game.input.keyPresses['ArrowLeft']) {
+    if (this.#game.input.left()) {
       if (this.#digit > 1) {
         this.#selectDigit(this.#digit - 1);
       }
     }
 
-    if (this.#game.input.keyPresses['KeyD'] || this.#game.input.keyPresses['ArrowRight']) {
+    if (this.#game.input.right()) {
       if (this.#digit < 9) {
         this.#selectDigit(this.#digit + 1);
       }
     }
 
-    if (this.#game.input.keyPresses['KeyX'] || this.#game.input.keyPresses['Digit0']) {
+    if (this.#game.input.cancel()) {
       this.#selectDigit(null);
     }
 
@@ -107,21 +128,17 @@ export default class {
   }
 
   #setGrid() {
-    const starts = [
-      [
-        6, 8, 0, 1, 0, 0, 0, 9, 0,
-        0, 3, 4, 5, 0, 8, 0, 2, 0,
-        2, 1, 0, 0, 6, 0, 3, 0, 0,
-        5, 0, 0, 4, 0, 7, 0, 0, 9,
-        3, 4, 2, 9, 0, 0, 0, 0, 6,
-        0, 0, 7, 0, 8, 0, 5, 0, 0,
-        9, 2, 0, 8, 0, 0, 0, 5, 3,
-        0, 0, 3, 2, 0, 0, 9, 1, 8,
-        0, 0, 0, 3, 0, 0, 0, 6, 7,
-      ]
+    const start = [
+      6, 8, 0, 1, 0, 0, 0, 9, 0,
+      0, 3, 4, 5, 0, 8, 0, 2, 0,
+      2, 1, 0, 0, 6, 0, 3, 0, 0,
+      5, 0, 0, 4, 0, 7, 0, 0, 9,
+      3, 4, 2, 9, 0, 0, 0, 0, 6,
+      0, 0, 7, 0, 8, 0, 5, 0, 0,
+      9, 2, 0, 8, 0, 0, 0, 5, 3,
+      0, 0, 3, 2, 0, 0, 9, 1, 8,
+      0, 0, 0, 3, 0, 0, 0, 6, 7,
     ];
-
-    const start = starts[Math.floor(Math.random() * starts.length)];
 
     for (let y = 0; y < 9; y++) {
       for (let x = 0; x < 9; x++) {
@@ -277,11 +294,11 @@ export default class {
   #selectDigit(digit) {
     this.#digit = digit;
 
-    for (const button of this.#buttons.sprites) {
+    for (const button of this.#activeButtons) {
       button.activate(true);
     }
 
-    this.#buttons.sprites[digit != null ? digit - 1 : 9].activate(false);
+    this.#activeButtons[digit != null ? digit - 1 : 9].activate(false);
 
     this.#buttons.changed();
   }

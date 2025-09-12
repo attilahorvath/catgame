@@ -43,6 +43,7 @@ export default {
       'update': 'u',
       'draw': 'd',
       'write': 'w',
+      'emit': 'e',
       // 'clear': 'c',
 
       'setColor': 'cc',
@@ -64,6 +65,14 @@ export default {
       'projection': 'p',
       'horizontal': 'o',
       'symbol': 'm',
+
+      'left': 'l',
+      'right': 'r',
+      'cancel': 'c',
+
+      'enabled': 'e',
+      'disabled': 'i',
+      'hidden': 'h',
 
       CENTER: -1,
 
@@ -95,6 +104,12 @@ export default {
       SINE_ANIMATION: '0',
       SHAKE_ANIMATION: '1',
       TYPING_ANIMATION: '2',
+
+      DIG: '0',
+      FLAG: '1',
+      MARK: '2',
+      FLAGGED: '3',
+      MARKED: '4',
     }),
     glsl({
       include: 'shaders/**/*.{vert,frag}'

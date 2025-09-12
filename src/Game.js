@@ -11,6 +11,7 @@ import PawPawToe from './minigames/PawPawToe';
 import Meowmory from './minigames/Meowmory';
 import Meowjong from './minigames/Meowjong';
 import Meowsweeper from './minigames/Meowsweeper';
+import Sudocat from './minigames/Sudocat';
 
 export default class {
   #started;
@@ -39,7 +40,7 @@ export default class {
         }
 
         this.#state = new Select();
-        // this.#state = new Minigame(Meowsweeper);
+        // this.#state = new Minigame(Sudocat);
         this.#state.init(this);
         this.#started = true;
       }

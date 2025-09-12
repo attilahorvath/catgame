@@ -89,4 +89,16 @@ export default class {
   click() {
     return !this.clickRead && ((this.mouse && this.release) || (!this.mouse && this.press));
   }
+
+  left() {
+    return this.keyPresses['KeyA'] || this.keyPresses['ArrowLeft'];
+  }
+
+  right() {
+    return this.keyPresses['KeyD'] || this.keyPresses['ArrowRight'];
+  }
+
+  cancel() {
+    return this.keyPresses['KeyX'] || this.keyPresses['Digit0'];
+  }
 }

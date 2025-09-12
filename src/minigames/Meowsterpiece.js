@@ -76,18 +76,18 @@ export default class {
     this.#flagButton = this.#buttons.sprites[1];
     this.#flagButton.write(game.text, 'X', 30, ACTIVE_COLOR);
 
-    this.#setMode('mark');
+    this.#setMode(MARK);
 
     this.#grid.changed();
   }
 
   update() {
-    if (this.#game.input.keyPresses['KeyA'] || this.#game.input.keyPresses['ArrowLeft']) {
-      this.#setMode('mark');
+    if (this.#game.input.left()) {
+      this.#setMode(MARK);
     }
 
-    if (this.#game.input.keyPresses['KeyD'] || this.#game.input.keyPresses['ArrowRight']) {
-      this.#setMode('flag');
+    if (this.#game.input.right()) {
+      this.#setMode(FLAG);
     }
 
     this.#grid.update();
@@ -103,9 +103,9 @@ export default class {
     (cell.content || {}).enabled = false;
 
     switch (this.#mode) {
-    case 'mark':
-      if (cell.state !== 'marked') {
-        cell.state = 'marked';
+    case MARK:
+      if (cell.state !== MARKED) {
+        cell.state = MARKED;
         cell.setBaseColor(ACTIVE_COLOR);
       } else {
         cell.state = null;
@@ -113,10 +113,10 @@ export default class {
       }
       break;
 
-    case 'flag':
+    case FLAG:
       cell.setBaseColor(PRIMARY_COLOR);
-      if (cell.state !== 'flagged') {
-        cell.state = 'flagged';
+      if (cell.state !== FLAGGED) {
+        cell.state = FLAGGED;
         cell.write(this.#game.text, 'X', this.#grid.s * 2 / 3, HIGHLIGHT_COLOR);
       } else {
         cell.state = null;
@@ -131,17 +131,17 @@ export default class {
 
   #buttonClick(button) {
     if (button === this.#flagButton) {
-      this.#setMode('flag');
+      this.#setMode(FLAG);
     } else if (button === this.#markButton) {
-      this.#setMode('mark');
+      this.#setMode(MARK);
     }
   }
 
   #setMode(mode) {
     this.#mode = mode;
 
-    this.#markButton.activate(this.#mode !== 'mark');
-    this.#flagButton.activate(this.#mode !== 'flag');
+    this.#markButton.activate(this.#mode !== MARK);
+    this.#flagButton.activate(this.#mode !== FLAG);
 
     this.#buttons.changed();
   }
@@ -159,11 +159,11 @@ export default class {
       let correct = 0;
 
       for (let y = this.#maxColumns; y < this.#h; y++) {
-        if (this.#grid.cellAt(x, y).state === 'marked') {
+        if (this.#grid.cellAt(x, y).state === MARKED) {
           current++;
         }
 
-        if (this.#grid.cellAt(x, y).state !== 'marked' || y === this.#h - 1) {
+        if (this.#grid.cellAt(x, y).state !== MARKED || y === this.#h - 1) {
           if ((current > 0 || y === this.#h - 1) && index < this.#columns[x - this.#maxRows].length) {
             if (current > this.#columns[x - this.#maxRows][index]) {
               this.#grid.cellAt(x, index + (this.#maxColumns - this.#columns[x - this.#maxRows].length)).setBaseColor(HIGHLIGHT_COLOR);
@@ -194,11 +194,11 @@ export default class {
       let correct = 0;
 
       for (let x = this.#maxRows; x < this.#w; x++) {
-        if (this.#grid.cellAt(x, y).state === 'marked') {
+        if (this.#grid.cellAt(x, y).state === MARKED) {
           current++;
         }
 
-        if (this.#grid.cellAt(x, y).state !== 'marked' || x === this.#w - 1) {
+        if (this.#grid.cellAt(x, y).state !== MARKED || x === this.#w - 1) {
           if ((current > 0 || x === this.#w - 1) && index < this.#rows[y - this.#maxColumns].length) {
             if (current > this.#rows[y - this.#maxColumns][index]) {
               this.#grid.cellAt(index + (this.#maxRows - this.#rows[y - this.#maxColumns].length), y).setBaseColor(HIGHLIGHT_COLOR);
