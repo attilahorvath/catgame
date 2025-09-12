@@ -6,6 +6,7 @@ import Meowsweeper from '../minigames/Meowsweeper';
 import PawPawToe from '../minigames/PawPawToe';
 import Sudocat from '../minigames/Sudocat';
 import Meowmory from '../minigames/Meowmory';
+import Meowjong from '../minigames/Meowjong';
 import Meowsterpiece from '../minigames/Meowsterpiece';
 
 import Matrix3 from '../Matrix3';
@@ -48,7 +49,7 @@ export default class {
 
     this.#spriteBatch = new SpriteBatch(game);
 
-    const minigameClasses = [PawPawToe, Meowmory, Meowsweeper, Sudocat, Meowsterpiece];
+    const minigameClasses = [PawPawToe, Meowmory, Meowjong, Sudocat, Meowsterpiece, Meowsweeper];
 
     for (let i = 0; i < 21; i++) {
       if (minigameClasses[i] && (i == 0 || !this.#firstStart)) {

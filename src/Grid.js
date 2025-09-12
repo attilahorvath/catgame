@@ -5,7 +5,7 @@ export default class extends SpriteBatch {
   #spacingX;
   #spacingY;
   #onclick;
-  #color;
+  // #color;
   #active;
   #pressed;
 
@@ -30,19 +30,20 @@ export default class extends SpriteBatch {
     this.#spacingX = spacingX ?? 0;
     this.#spacingY = spacingY ?? 0;
     this.#onclick = onclick;
-    this.#color = color;
+    this.color = color;
 
     for (let gridY = 0; gridY < h; gridY++) {
       for (let gridX = 0; gridX < w; gridX++) {
         const cell = this.add(x + gridX * this.#fullW, y + gridY * this.#fullH, s, type, color);
         cell.setColor(color);
+        cell.grid = this;
         cell.gridX = gridX;
         cell.gridY = gridY;
       }
     }
   }
 
-  update() {
+  update(pressHandled = false) {
     if (!this.disabled) {
       if (this.#game.input.moved) {
         let newActive = this.#cellAtPosition(this.#game.input.x, this.#game.input.y);
@@ -54,7 +55,7 @@ export default class extends SpriteBatch {
           if (this.#onclick) {
             if (this.#game.input.mouse) {
               if (!this.#active?.inactive) {
-                this.#active?.setColor(this.#active?.baseColor || this.#color);
+                this.#active?.setColor(this.#active?.baseColor || this.color);
               }
 
               newActive?.setColor(HIGHLIGHT_COLOR);
@@ -66,7 +67,7 @@ export default class extends SpriteBatch {
         this.#active = newActive;
       }
 
-      if (this.#game.input.press) {
+      if (this.#game.input.press && !pressHandled) {
         this.#pressed = this.#active;
 
         if (this.#onclick) {
@@ -77,9 +78,9 @@ export default class extends SpriteBatch {
         }
       }
 
-      if (this.#game.input.click()) {
+      if (this.#game.input.click() && !pressHandled) {
         if (this.#onclick) {
-          this.#pressed?.setColor(this.#pressed?.baseColor || this.#color);
+          this.#pressed?.setColor(this.#pressed?.baseColor || this.color);
           if (this.#active && this.#active === this.#pressed) {
             this.#game.input.clickRead = true;
             this.#onclick(this.#pressed);
@@ -92,6 +93,8 @@ export default class extends SpriteBatch {
     }
 
     super.update();
+
+    return this.#active != null;
   }
 
   cellAt(x, y) {
