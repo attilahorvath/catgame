@@ -39,7 +39,7 @@ export default class {
         }
 
         this.#state = new Select();
-        // this.#state = new Minigame(Meowjong);
+        // this.#state = new Minigame(Meowsweeper);
         this.#state.init(this);
         this.#started = true;
       }

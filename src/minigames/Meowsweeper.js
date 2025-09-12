@@ -32,7 +32,7 @@ export default class {
 
     this.#w = game.renderer.horizontal ? 20 : 10;
     this.#h = game.renderer.horizontal ? 10 : 20;
-    this.#mines = 10;
+    this.#mines = 30;
 
     this.#fontSize = 26;
 
