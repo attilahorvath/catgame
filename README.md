@@ -9,12 +9,12 @@ Poor little stray Vicki is a void kitten who has just been adopted into a busy a
 A Voiding Your Problems is a collection of 6 simple catty minigames where you need to prove your worth to the other cats.
 
 Included are the following games:
-- Paw Paw Toe
-- Meowmory
-- Meowjong
-- Sudocat
-- Meowsterpiece
-- Meowsweeper
+- Paw Paw Toe with Orange Cat, The Useless Boyfriend
+- Meowmory with Molly
+- Meowjong with Pablo
+- Sudocat with Kumba
+- Meowsterpiece with Cha Cha
+- Meowsweeper with Queen Kara III
 
 The game is optimised for both mobile and desktop gameplay, you can use your touchscreen or your mouse and keyboard shortcuts (arrows, A-D, 1-0 digits, X, space) to control the minigames.
 
