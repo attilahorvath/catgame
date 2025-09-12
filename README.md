@@ -38,3 +38,5 @@ I would like to thank my cats, Kara and Vicki for the inspiration, as well as ou
 Special thanks for Greggman of [WebGL2 Fundamentals](https://webgl2fundamentals.org/) for the excellent guides and explanations regarding WebGL.
 
 And an extra special thanks for Giulia Adde for all her love, input, support and patience during some long nights of coding. Also, for her help with the art direction and iconography.
+
+![Hero image](hero.png)
