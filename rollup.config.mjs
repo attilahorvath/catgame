@@ -125,7 +125,7 @@ export default {
       include: 'shaders/**/*.{vert,frag}'
     }),
     html({
-      title: 'Cat Game'
+      title: 'A Voiding Your Problems'
     }),
     terser()
   ]

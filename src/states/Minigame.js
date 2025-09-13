@@ -129,7 +129,7 @@ export default class {
 
     const texts = ['CONGRATS!!', 'WELL DONE!!', 'GOOD JOB!!', 'PAWSOME!!', 'AMEOWZING!!'];
     const text = this.#game.text.write(texts[Math.floor(Math.random() * texts.length)], CENTER, CENTER, 48, HIGHLIGHT_COLOR, [SINE_ANIMATION]);
-    this.#game.text.write('NOW GO HELP THE OTHER CATS!', CENTER, text.y + 75, 32, ACTIVE_COLOR, [TYPING_ANIMATION, SHAKE_ANIMATION], 1200);
+    this.#game.text.write('GO HELP THE OTHER CATS!', CENTER, text.y + 75, 32, ACTIVE_COLOR, [TYPING_ANIMATION, SHAKE_ANIMATION], 1200);
 
     this.#timer = this.#game.scheduleTimer(400, () => this.#game.particles.emit(Math.random() * this.#game.renderer.w, Math.random() * this.#game.renderer.h, true, 256, 1000), true);
   }

@@ -50,7 +50,7 @@ export default class {
     let buttonSpacing = 10;
 
     if (game.renderer.h - (100 + 3 * (gridSize + gridSpacing) + 20) >= 256) {
-      buttonSize = Math.floor(Math.min((game.renderer.w - 20) / 3 - (buttonSpacing * (3 - 1) / 3), (game.renderer.h - (100 + 3 * (gridSize + buttonSpacing) + 20)) / 4 - (buttonSpacing * (4 - 1) / 4)));
+      buttonSize = Math.min(Math.floor(Math.min((game.renderer.w - 20) / 3 - (buttonSpacing * (3 - 1) / 3), (game.renderer.h - (100 + 3 * (gridSize + buttonSpacing) + 20)) / 4 - (buttonSpacing * (4 - 1) / 4))), 128);
 
       this.#buttons = new Grid(game, CENTER, 100 + 3 * (gridSize + gridSpacing), 3, 4, buttonSize, buttonSpacing, buttonSpacing, (button) => this.#buttonClick(button));
       this.#buttons.cellAt(0, 3).activate(false);
