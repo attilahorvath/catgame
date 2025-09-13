@@ -41,7 +41,7 @@ export default class {
 
   #click(cell) {
     if (!cell.symbol) {
-      this.#mark(cell, 'X');
+      this.#mark(cell, X_SYMBOL);
 
       this.#grid.disabled = true;
 
@@ -50,7 +50,7 @@ export default class {
           const available = this.#grid.sprites.filter(sprite => !sprite.symbol);
 
           if (available.length > 0) {
-            this.#mark(available[Math.floor(Math.random() * available.length)], 'O');
+            this.#mark(available[Math.floor(Math.random() * available.length)], O_SYMBOL);
 
             this.#grid.disabled = false;
             this.#grid.changed();
@@ -68,7 +68,7 @@ export default class {
 
       cell.activate(false);
 
-      cell.draw(this.#spriteBatch, 64, 0, symbol === 'X' ? BLACKCAT_COLOR : ORANGECAT_COLOR);
+      cell.draw(this.#spriteBatch, 64, 0, symbol === X_SYMBOL ? BLACKCAT_COLOR : ORANGECAT_COLOR);
 
       this.#checkGrid();
     }
@@ -84,12 +84,12 @@ export default class {
         symbolCounts.set(cell.symbol, (symbolCounts.get(cell.symbol) || 0) + 1);
       }
 
-      if (symbolCounts.get('X') === 3) {
-        return this.#win('X');
+      if (symbolCounts.get(X_SYMBOL) === 3) {
+        return this.#win(X_SYMBOL);
       }
 
-      if (symbolCounts.get('O') === 3) {
-        return this.#win('O');
+      if (symbolCounts.get(O_SYMBOL) === 3) {
+        return this.#win(O_SYMBOL);
       }
     }
 
@@ -102,29 +102,29 @@ export default class {
         symbolCounts.set(cell.symbol, (symbolCounts.get(cell.symbol) || 0) + 1);
       }
 
-      if (symbolCounts.get('X') === 3) {
-        return this.#win('X');
+      if (symbolCounts.get(X_SYMBOL) === 3) {
+        return this.#win(X_SYMBOL);
       }
 
-      if (symbolCounts.get('O') === 3) {
-        return this.#win('O');
+      if (symbolCounts.get(O_SYMBOL) === 3) {
+        return this.#win(O_SYMBOL);
       }
     }
 
-    if (this.#grid.cellAt(0, 0).symbol === 'X' && this.#grid.cellAt(1, 1).symbol === 'X' && this.#grid.cellAt(2, 2).symbol === 'X') {
-      return this.#win('X');
+    if (this.#grid.cellAt(0, 0).symbol === X_SYMBOL && this.#grid.cellAt(1, 1).symbol === X_SYMBOL && this.#grid.cellAt(2, 2).symbol === X_SYMBOL) {
+      return this.#win(X_SYMBOL);
     }
 
-    if (this.#grid.cellAt(0, 0).symbol === 'O' && this.#grid.cellAt(1, 1).symbol === 'O' && this.#grid.cellAt(2, 2).symbol === 'O') {
-      return this.#win('O');
+    if (this.#grid.cellAt(0, 0).symbol === O_SYMBOL && this.#grid.cellAt(1, 1).symbol === O_SYMBOL && this.#grid.cellAt(2, 2).symbol === O_SYMBOL) {
+      return this.#win(O_SYMBOL);
     }
 
-    if (this.#grid.cellAt(2, 0).symbol === 'X' && this.#grid.cellAt(1, 1).symbol === 'X' && this.#grid.cellAt(0, 2).symbol === 'X') {
-      return this.#win('X');
+    if (this.#grid.cellAt(2, 0).symbol === X_SYMBOL && this.#grid.cellAt(1, 1).symbol === X_SYMBOL && this.#grid.cellAt(0, 2).symbol === X_SYMBOL) {
+      return this.#win(X_SYMBOL);
     }
 
-    if (this.#grid.cellAt(2, 0).symbol === 'O' && this.#grid.cellAt(1, 1).symbol === 'O' && this.#grid.cellAt(0, 2).symbol === 'O') {
-      return this.#win('O');
+    if (this.#grid.cellAt(2, 0).symbol === O_SYMBOL && this.#grid.cellAt(1, 1).symbol === O_SYMBOL && this.#grid.cellAt(0, 2).symbol === O_SYMBOL) {
+      return this.#win(O_SYMBOL);
     }
   }
 
@@ -133,9 +133,9 @@ export default class {
     this.#grid.disabled = true;
     (this.#timer || {}).disabled = true;
 
-    if (symbol === 'X') {
+    if (symbol === X_SYMBOL) {
       this.#onwin();
-    } else if (symbol === 'O') {
+    } else if (symbol === O_SYMBOL) {
       this.#grid.disabled = true;
       this.#game.scheduleTimer(2000, () => this.#onlose());
     }

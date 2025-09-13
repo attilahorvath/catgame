@@ -53,6 +53,7 @@ export default {
 
       'setColor': 'cc',
       'setBaseColor': 'cb',
+      'baseColor': 'bc',
 
       'catName': 'cn',
       'catText': 'ct',
@@ -71,18 +72,24 @@ export default {
       'projection': 'p',
       'horizontal': 'o',
       'symbol': 'm',
+      'ortho': 'or',
 
       'left': 'l',
       'right': 'r',
       'cancel': 'c',
+      'click': 'cl',
 
       'enabled': 'e',
       'disabled': 'i',
       'hidden': 'h',
+      'inactive': 'in',
+      'expired': 'ex',
 
       // 'spriteBatch': 'sb',
       // 'minigamesWon': 'mw',
+      // 'minigameClass': 'mc',
       'firstStart': 'fs',
+      'meta': 'mt',
 
       CENTER: -1,
 
@@ -120,6 +127,9 @@ export default {
       MARK: '2',
       FLAGGED: '3',
       MARKED: '4',
+
+      X_SYMBOL: '1',
+      O_SYMBOL: '2',
     }),
     glsl({
       include: 'shaders/**/*.{vert,frag}'
